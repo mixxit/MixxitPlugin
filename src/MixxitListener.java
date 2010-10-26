@@ -29,7 +29,8 @@ public class MixxitListener extends PluginListener
   public MixxitListener()
   {
     this.timer = new Timer();
-    this.timer.schedule(new RemindTask(this), 500L);
+    // Tom316 increase time to schedule for server overload
+    this.timer.schedule(new RemindTask(this), 700L);
     System.out.println(getDateTime() + " [INFO] Task Scheduled.");
     playerList = new ArrayList<p1>();
   }
@@ -125,6 +126,44 @@ public class MixxitListener extends PluginListener
     }
   }
 
+  // Tom316's pvp toggle and misc commands
+  
+  public boolean onCommand(Player player, String[] split)
+  {
+          if(split[0].equalsIgnoreCase("/health") && player.canUseCommand("/health"))
+          {
+            // Tom316 - Send a message to the player with his HP Value
+            player.sendMessage("HP:" + getPlayerHP(player));
+            return true;
+        }
+          
+          if(split[0].equalsIgnoreCase("/pvpenable") && player.canUseCommand("/pvpenable"))
+          {
+            // Tom316 - Enable PVP by setting its value to 1
+              pvp = 1; // Tom316 - 0 = Disabled, 1 = Enabled
+            player.sendMessage("PVP Enabled");
+            return true;
+        }
+          
+          if(split[0].equalsIgnoreCase("/pvpdisable") && player.canUseCommand("/pvpdisable"))
+          {
+            // Tom316 - Disable PVP by setting its value to 0
+            pvp = 0; // Tom316 - 0 = Disabled, 1 = Enabled
+            player.sendMessage("PVP Disabled");
+            return true;
+        }
+          
+          if(split[0].equalsIgnoreCase("/heal") && player.canUseCommand("/heal"))
+          {
+            // Tom316 - Set players health to 100
+            setPlayerHP(player,100);
+            player.sendMessage("You have been fully healed. HP:" + getPlayerHP(player));
+            return true;
+        }
+          
+          return false;
+  }
+  
   public void onLogin(Player player)
   {
 	  // check if the player exists
@@ -188,6 +227,33 @@ public class MixxitListener extends PluginListener
 	  return 0;
   }
   
+  public void DoPlayerDeath(Player player)
+  {
+	  // slain
+	  player.sendMessage("You have slain " + player.getName());
+	  
+	  // delete items
+	  
+	  // Tom316 - Loop through the inventory slots removing each item.
+      for(int slot=9;slot<36;slot++)
+      {
+          // Tom316 - Remove the item from the slot.
+          player.getInventory().removeItem(slot);
+          
+          // maybe spawn the item on the ground here?
+          
+      }
+      // Tom316 - Make sure we send a inventory update to the player so there client gets the changes.
+      player.getInventory().updateInventory();
+	  
+      
+	  // warp home
+      Warp home = etc.getDataSource().getHome(player.getName());
+      player.teleportTo(home.Location);
+      setPlayerHP(player,100);
+
+  }
+  
   public void onArmSwing(Player player)
   {
 	  
@@ -213,13 +279,11 @@ public class MixxitListener extends PluginListener
 				        
 				        if (getPlayerHP(p) < thisdmg)
 				        {
-				        	setPlayerHP(p,100);
-				        	player.sendMessage("You have slain " + p.getName());
+				        	
 				        	p.sendMessage("You have been slain by " + player.getName() + "!");
 				            // reset hp and warp home
-				            Warp home = etc.getDataSource().getHome(p.getName());
-				            p.teleportTo(home.Location);
-				        	
+				            
+				        	DoPlayerDeath(p);
 				        }
 				        else {
 				        	

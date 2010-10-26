@@ -29,13 +29,9 @@ class RemindTask extends TimerTask
       {
     	  
         p.sendMessage("You were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + parent.getPlayerHP(p) + ")");
-    	parent.setPlayerHP(p, 100);
-        p.sendMessage("You have been slain!");
         
         // reset hp and warp home
-        Warp home = etc.getDataSource().getHome(p.getName());
-        p.teleportTo(home.Location);
-        
+        parent.DoPlayerDeath(p);
       } else {
     	if (m.getHealth() == 0)
     	{
@@ -84,7 +80,8 @@ class RemindTask extends TimerTask
     }
 
     this.timer = new Timer();
-    this.timer.schedule(new RemindTask(parent), 500L);
+    // Tom316 increase time to schedule for server overload
+    this.timer.schedule(new RemindTask(parent), 700L);
   }
 
   private double getDistance(Player a, Mob b)
