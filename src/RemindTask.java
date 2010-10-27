@@ -10,7 +10,8 @@ class RemindTask extends TimerTask
 {
 	Timer timer;
 	MixxitListener parent;
-
+	int Combattimer = MixxitPlugin.Combattimer;
+	
 	public RemindTask(MixxitListener parent)
 	{
 		this.parent = parent;
@@ -103,7 +104,7 @@ class RemindTask extends TimerTask
 
 		this.timer = new Timer();
 		// Tom316 increase time to schedule for server overload
-		this.timer.schedule(new RemindTask(parent), 700L);
+		this.timer.schedule(new RemindTask(parent), Combattimer);
 	}
 
 	private double getDistance(Player a, Mob b)

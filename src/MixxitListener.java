@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+
 public class MixxitListener extends PluginListener
 {
 	public class p1 {
@@ -24,25 +26,49 @@ public class MixxitListener extends PluginListener
 		}
 	}
 
-	public int pvp = 0;
+	 // Tom316 - Pull our variables over from MixxitPlugin.java where we load in all the information from the properties file.
+    boolean pvp = MixxitPlugin.pvp;
+    boolean dropinventory = MixxitPlugin.dropinventory;
+    int Combattimer = MixxitPlugin.Combattimer;
+    
+    int woodensword = MixxitPlugin.woodensword;
+    int stonesword = MixxitPlugin.stonesword;
+    int ironsword = MixxitPlugin.ironsword;
+    int goldsword = MixxitPlugin.goldsword;
+    int diamondsword = MixxitPlugin.diamondsword;
+    
+    int woodenspade = MixxitPlugin.woodenspade;
+    int stonespade = MixxitPlugin.stonespade;
+    int ironspade = MixxitPlugin.ironspade;
+    int goldspade = MixxitPlugin.goldspade;
+    int diamondspade = MixxitPlugin.diamondspade;
+    
+    int woodenpickaxe = MixxitPlugin.woodenpickaxe;
+    int stonepickaxe = MixxitPlugin.stonepickaxe;
+    int ironpickaxe = MixxitPlugin.ironpickaxe;
+    int goldpickaxe = MixxitPlugin.goldpickaxe;
+    int diamondpickaxe = MixxitPlugin.diamondpickaxe;
+    
+    int woodenaxe = MixxitPlugin.woodenaxe;
+    int stoneaxe = MixxitPlugin.stoneaxe;
+    int ironaxe = MixxitPlugin.ironaxe;
+    int goldaxe = MixxitPlugin.goldaxe;
+    int diamondaxe = MixxitPlugin.diamondaxe;
+    
+    int basedamage = MixxitPlugin.basedamage;
+    
 	public Timer timer;
 	public Timer saveTimer;
 	
 	public ArrayList<p1> playerList;
 	public MixxitListener()
 	{
-		
-		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.properties");
-		configProperties.load();
-
 		this.timer = new Timer();
 		// Tom316 increase time to schedule for server overload
-		this.timer.schedule(new RemindTask(this), 700L);
+		// get from Combattimer property
+		this.timer.schedule(new RemindTask(this), Combattimer);
 		System.out.println(getDateTime() + " [INFO] Melee Combat Task Scheduled.");
 		playerList = new ArrayList<p1>();
-		
-		// set current setting from txt file
-		setFFAPVP(configProperties.getInt("FFAPVP", 0));
 		
 		PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
 		configPlayers.load();
@@ -53,15 +79,6 @@ public class MixxitListener extends PluginListener
 		System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
 	}
 	
-	public void packProperties()
-	{
-		// Packs all server settings into the configProperties file
-		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.properties");
-		configProperties.load();
-		configProperties.setInt("FFAPVP",this.pvp);
-		System.out.println(getDateTime() + " [INFO] MixxitPlugin settings saved.");
-		
-	}
 	
 	public void packPlayers()
 	{
@@ -72,11 +89,6 @@ public class MixxitListener extends PluginListener
 
 	}
 	
-	public void setFFAPVP(int value)
-	{
-		this.pvp = value;
-	}
-
 	private String getDateTime()
 	{
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -222,20 +234,20 @@ public class MixxitListener extends PluginListener
 
 
 		if(split[0].equalsIgnoreCase("/pvpenable") && player.canUseCommand("/pvpenable"))
-		{
-			// Tom316 - Enable PVP by setting its value to 1
-			setFFAPVP(1); // Tom316 - 0 = Disabled, 1 = Enabled
-			player.sendMessage("PVP Enabled");
-			return true;
-		}
+        {
+          // Tom316 - Enable PVP by setting its value to 1
+          pvp = true; // Tom316 - false = Disabled, true = Enabled
+          player.sendMessage("PVP Enabled");
+          return true;
+       }
 
 		if(split[0].equalsIgnoreCase("/pvpdisable") && player.canUseCommand("/pvpdisable"))
-		{
-			// Tom316 - Disable PVP by setting its value to 0
-			setFFAPVP(0); // Tom316 - 0 = Disabled, 1 = Enabled
-			player.sendMessage("PVP Disabled");
-			return true;
-		}
+        {
+          // Tom316 - Disable PVP by setting its value to 0
+          pvp = false; // Tom316 - false = Disabled, true = Enabled
+          player.sendMessage("PVP Disabled");
+          return true;
+      }
 
 		if(split[0].equalsIgnoreCase("/heal") && player.canUseCommand("/heal"))
 		{
@@ -339,14 +351,17 @@ public class MixxitListener extends PluginListener
 	}
 	public void DoPlayerDeath(Player player)
 	{
-		// slain
-		player.sendMessage("You have been slain");
-
-		DropPlayerItems(player);
-		// warp to spawn
-		player.teleportTo(etc.getServer().getSpawnLocation());
-		setPlayerHP(player,100);
-
+	      // slain
+	      player.sendMessage("You have been slain");
+	      
+	      if (dropinventory = true )
+	      {
+	          DropPlayerItems(player);
+	      }
+	      
+	      // warp to spawn
+	      player.teleportTo(etc.getServer().getSpawnLocation());
+	      setPlayerHP(player,100);
 	}
 
 	public String getItemName(int itemId)
@@ -390,116 +405,116 @@ public class MixxitListener extends PluginListener
 	}
 
 	public int getItemDamage(int itemId)
-	{
-		// in case there is no item found, use the base damage for a 'fashioned weapon' (ie brick etc) (3)
-		int itembasedamage = 3;
-		// WOODEN ITEMS
-		if (itemId == 268)
-		{
-			// Wooden Sword
-			itembasedamage = 6;
-		}
-		if (itemId == 269)
-		{
-			// Wooden Spade
-			itembasedamage = 4;
-		}
-		if (itemId == 270)
-		{
-			// Wooden Pickaxe
-			itembasedamage = 4;
-		}
-		if (itemId == 271)
-		{
-			// Wooden Axe
-			itembasedamage = 5;
-		}
-		// STONE ITEMS
-		if (itemId == 272)
-		{
-			// Stone Sword
-			itembasedamage = 7;
-		}
-		if (itemId == 273)
-		{
-			// Stone Spade
-			itembasedamage = 5;
-		}
-		if (itemId == 274)
-		{
-			// Stone Pickaxe
-			itembasedamage = 5;
-		}
-		if (itemId == 275)
-		{
-			// Stone Axe
-			itembasedamage = 6;
-		}
-		// DIAMOND ITEMS
-		if (itemId == 276)
-		{
-			// Diamond Sword
-			itembasedamage = 20;
-		}
-		if (itemId == 277)
-		{
-			// Diamond Spade
-			itembasedamage = 10;
-		}
-		if (itemId == 278)
-		{
-			// Diamond Pickaxe
-			itembasedamage = 10;
-		}
-		if (itemId == 279)
-		{
-			// Diamond Axe
-			itembasedamage = 18;
-		}
-		// IRON ITEMS
-		if (itemId == 267)
-		{
-			// Iron Sword
-			itembasedamage = 8;
-		}
-		if (itemId == 256)
-		{
-			// Iron Spade
-			itembasedamage = 6;
-		}
-		if (itemId == 257)
-		{
-			// Iron Pickaxe
-			itembasedamage = 6;
-		}
-		if (itemId == 258)
-		{
-			// Iron Axe
-			itembasedamage = 7;
-		}
-		// GOLD ITEMS
-		if (itemId == 283)
-		{
-			// Gold Sword
-			itembasedamage = 14;
-		}
-		if (itemId == 284)
-		{
-			// Gold Spade
-			itembasedamage = 8;
-		}
-		if (itemId == 285)
-		{
-			// Gold Pickaxe
-			itembasedamage = 8;
-		}
-		if (itemId == 286)
-		{
-			// Gold Axe
-			itembasedamage = 12;
-		}
-		return itembasedamage;
-	}
+	  {
+	      // in case there is no item found, use the base damage for a 'fashioned weapon' (ie brick etc) (3)
+	      int itembasedamage = basedamage;
+	           // WOODEN ITEMS
+	         if (itemId == 268)
+	         {
+	             // Wooden Sword
+	             itembasedamage = woodensword;
+	         }
+	         if (itemId == 269)
+	         {
+	             // Wooden Spade
+	             itembasedamage = woodenspade;
+	         }
+	         if (itemId == 270)
+	         {
+	             // Wooden Pickaxe
+	             itembasedamage = woodenpickaxe;
+	         }
+	         if (itemId == 271)
+	         {
+	             // Wooden Axe
+	             itembasedamage = woodenaxe;
+	         }
+	         // STONE ITEMS
+	         if (itemId == 272)
+	         {
+	             // Stone Sword
+	             itembasedamage = stonesword;
+	         }
+	         if (itemId == 273)
+	         {
+	             // Stone Spade
+	             itembasedamage = stonespade;
+	         }
+	         if (itemId == 274)
+	         {
+	             // Stone Pickaxe
+	             itembasedamage = stonepickaxe;
+	         }
+	         if (itemId == 275)
+	         {
+	             // Stone Axe
+	             itembasedamage = stoneaxe;
+	         }
+	         // DIAMOND ITEMS
+	         if (itemId == 276)
+	         {
+	             // Diamond Sword
+	             itembasedamage = diamondsword;
+	         }
+	         if (itemId == 277)
+	         {
+	             // Diamond Spade
+	             itembasedamage = diamondspade;
+	         }
+	         if (itemId == 278)
+	         {
+	             // Diamond Pickaxe
+	             itembasedamage = diamondpickaxe;
+	         }
+	         if (itemId == 279)
+	         {
+	             // Diamond Axe
+	             itembasedamage = diamondaxe;
+	         }
+	         // IRON ITEMS
+	         if (itemId == 267)
+	         {
+	             // Iron Sword
+	             itembasedamage = ironsword;
+	         }
+	         if (itemId == 256)
+	         {
+	             // Iron Spade
+	             itembasedamage = ironspade;
+	         }
+	         if (itemId == 257)
+	         {
+	             // Iron Pickaxe
+	             itembasedamage = ironpickaxe;
+	         }
+	         if (itemId == 258)
+	         {
+	             // Iron Axe
+	             itembasedamage = ironaxe;
+	         }
+	         // GOLD ITEMS
+	         if (itemId == 283)
+	         {
+	             // Gold Sword
+	             itembasedamage = goldsword;
+	         }
+	         if (itemId == 284)
+	         {
+	             // Gold Spade
+	             itembasedamage = goldspade;
+	         }
+	         if (itemId == 285)
+	         {
+	             // Gold Pickaxe
+	             itembasedamage = goldpickaxe;
+	         }
+	         if (itemId == 286)
+	         {
+	             // Gold Axe
+	             itembasedamage = goldaxe;
+	         }
+	         return itembasedamage;
+	  }
 
 	public int getPlayerDamage(Player player)
 	{
@@ -531,7 +546,7 @@ public class MixxitListener extends PluginListener
 				if (p.getName() == player.getName())
 				{
 				} else {
-					if (this.pvp == 1)
+					if (pvp = true)
 					{
 						double dist = getPlayerDistance(player, p);
 						if (dist <= 2.0D)
