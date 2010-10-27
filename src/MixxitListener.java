@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,8 +76,7 @@ public class MixxitListener extends PluginListener
 		System.out.println(getDateTime() + " [INFO] Melee Combat Task Scheduled.");
 		playerList = new ArrayList<p1>();
 		
-		PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
-		configPlayers.load();
+		loadPlayerList();
 		
 		// Set save
 		this.saveTimer = new Timer();
@@ -82,6 +87,55 @@ public class MixxitListener extends PluginListener
 		
 	}
 	
+	public void loadPlayerList()
+	{
+		// populate the playerlist with previous data
+		
+		try {
+			String line;
+			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream("MixxitPlugin.txt"))));
+			while ((line = br.readLine()) != null) {
+				// loop through each player
+				
+				// # ? skip it...
+				if (line.substring(0,1).matches("[#]"))
+				{
+					System.out.println(getDateTime() + " [DEBUG] Comment Skipped");
+				} else {
+				
+					// first remove the \'s
+					String slashedstring;
+					slashedstring = line.replace("\\:",":");
+					
+					String[] tokens = slashedstring.split("=");
+					
+					String[] params = tokens[1].split(":");
+					
+					// hp
+					int curhp = Integer.parseInt(params[0]);
+					// exp
+					int curexp = Integer.parseInt(params[1]);
+					// melee					
+					int curmelee = Integer.parseInt(params[2]);
+
+					p1 curplayer = new p1(tokens[0], curhp);
+					curplayer.exp = curexp;
+					curplayer.melee = curmelee;
+					
+					System.out.println(getDateTime() + " [DEBUG] new player: " + curplayer.name + " added with: " + curplayer.hp + ":" + curplayer.exp + ":" + curplayer.melee);
+
+					
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public void packParameters()
 	{
@@ -117,8 +171,11 @@ public class MixxitListener extends PluginListener
 	{
 		// Packs all players stored in ArrayList playerList
 		// into the configPlayers file
-		// TODO
-		
+		PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
+		for (int i = 0; i < this.playerList.size(); i++) {
+			String playerData = this.playerList.get(i).hp + ":" + this.playerList.get(i).exp + ":" + this.playerList.get(i).melee;
+			configPlayers.setString(this.playerList.get(i).name, playerData);
+		}
 		// too spammy
 		//System.out.println(getDateTime() + " [INFO] MixxitPlugin player data saved.");
 	}

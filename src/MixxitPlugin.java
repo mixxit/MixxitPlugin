@@ -42,8 +42,6 @@ public class MixxitPlugin extends Plugin
 	    
 	// Tom316 - Addition of Logger support so that our plugins info is tagged into the minecraft logfile.
 	static final Logger log = Logger.getLogger("Minecraft");
-	 
-	 
 	static MixxitListener listener;
 	
 	private String getDateTime()
