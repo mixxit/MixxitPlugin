@@ -30,7 +30,7 @@ class RemindTask extends TimerTask
     	  
         p.sendMessage("You were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + parent.getPlayerHP(p) + ")");
         
-        // reset hp and warp home
+        // reset hp and warp to spawn
         parent.DoPlayerDeath(p);
       } else {
     	if (m.getHealth() == 0)

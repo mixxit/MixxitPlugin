@@ -421,6 +421,9 @@ public class MixxitListener extends PluginListener
 	  // randomise damage from 1 to max so far
 	  Random generator = new Random();
       int index = generator.nextInt(damage);
+      
+      // add one just incase it was 0 (maybe do a miss here instead)
+      index = index + 1;
 	  
 	  return index;
   }
@@ -458,7 +461,7 @@ public class MixxitListener extends PluginListener
 							if (getPlayerHP(p) < thisdmg)
 							{
 								p.sendMessage("You have been slain by " + player.getName() + "!");
-								// reset hp and warp home
+								// reset hp and warp to spawn
 								DoPlayerDeath(p);
 							} else {
 								setPlayerHP(p,getPlayerHP(p) - thisdmg);
