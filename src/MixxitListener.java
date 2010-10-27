@@ -77,6 +77,9 @@ public class MixxitListener extends PluginListener
 		this.saveTimer = new Timer();
 		this.timer.schedule(new SaveCombat(this), 10000L);
 		System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
+        System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Listener PVP:" + pvp);
+
+		
 	}
 	
 	
@@ -106,14 +109,18 @@ public class MixxitListener extends PluginListener
 		configProperties.setInt("iron-axe", ironaxe);
 		configProperties.setInt("gold-axe", goldaxe);
 		configProperties.setInt("diamond-axe", diamondaxe);
-		System.out.println(getDateTime() + " [INFO] MixxitPlugin properties saved.");
+		// too spammy
+		//System.out.println(getDateTime() + " [INFO] MixxitPlugin properties saved.");
 	}
 	
 	public void packPlayers()
 	{
 		// Packs all players stored in ArrayList playerList
 		// into the configPlayers file
-		System.out.println(getDateTime() + " [INFO] MixxitPlugin player data saved.");
+		// TODO
+		
+		// too spammy
+		//System.out.println(getDateTime() + " [INFO] MixxitPlugin player data saved.");
 	}
 	
 	private String getDateTime()

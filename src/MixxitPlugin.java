@@ -11,7 +11,7 @@ public class MixxitPlugin extends Plugin
 	private String version = "1.13";
 	
 	
-	 static boolean pvp = true;
+	 static boolean pvp = false;
 	 static boolean dropinventory = false;
 	    
 	 static int Combattimer = 700;
@@ -44,7 +44,7 @@ public class MixxitPlugin extends Plugin
 	static final Logger log = Logger.getLogger("Minecraft");
 	 
 	 
-	static final MixxitListener listener = new MixxitListener();
+	static MixxitListener listener;
 	
 	private String getDateTime()
 	{
@@ -64,12 +64,14 @@ public class MixxitPlugin extends Plugin
 		etc.getInstance().addCommand("/enablecombatlog", "- Enables your combat log");
 		etc.getInstance().addCommand("/disablecombatlog", "- Disables your combat log");
 		loadProperties();
+		listener = new MixxitListener();
 		System.out.println(getDateTime() + " [INFO] MixxitPlugin " + this.version + " enabled");    
 	}
 	
 	public void loadProperties()
     {
-        PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
+        properties = new PropertiesFile("MixxitPlugin.properties");
+        properties.load();
         try {
             // Tom316 - Pull out the information from our properties file.
             pvp = properties.getBoolean("pvp", false);
