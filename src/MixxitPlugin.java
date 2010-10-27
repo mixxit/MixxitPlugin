@@ -5,7 +5,7 @@ import java.util.Date;
 public class MixxitPlugin extends Plugin
 {
 	private String name = "MixxitPlugin";
-	private String version = "1.12";
+	private String version = "1.13";
 
 	static final MixxitListener listener = new MixxitListener();
 
