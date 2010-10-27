@@ -219,7 +219,7 @@ public class MixxitListener extends PluginListener
   public void DoPlayerDeath(Player player)
   {
 	  // slain
-	  player.sendMessage("You have slain " + player.getName());
+	  player.sendMessage("You have been slain");
 	  
 	  // delete items
 	  
@@ -227,12 +227,20 @@ public class MixxitListener extends PluginListener
       for(int slot=9;slot<36;slot++)
       {
     	  // what's the item id?
-    	  Item item = player.getInventory().getItemFromSlot(slot);
-    	  int itemid = item.getItemId();
-    	  int amount = item.getAmount();
-    	  
-    	  // dupe the item to the location of the player
-          player.giveItemDrop(itemid, amount);
+    	  try {
+	    	  Item item = player.getInventory().getItemFromSlot(slot);
+	    	  int itemid = item.getItemId();
+	    	  int amount = item.getAmount();
+	    	  
+	    	  
+	    	  // dupe the item to the location of the player
+	          player.giveItemDrop(itemid, amount);
+    	  } 
+    	  catch (NullPointerException e)
+    	  {
+    		  // no item
+    		  
+    	  }
     	  
           // Tom316 - Remove the item from the slot.
           player.getInventory().removeItem(slot);
