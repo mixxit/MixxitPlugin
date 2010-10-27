@@ -461,6 +461,7 @@ public class MixxitListener extends PluginListener
 							player.sendMessage("You strike " + p.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(player) + " Their HP: " + getPlayerHP(p));
 							if (getPlayerHP(p) < thisdmg)
 							{
+								player.sendMessage("You have slain " + p.getName() + "!");
 								p.sendMessage("You have been slain by " + player.getName() + "!");
 								// reset hp and warp to spawn
 								DoPlayerDeath(p);
