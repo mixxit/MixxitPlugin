@@ -27,8 +27,6 @@ class SaveCombat extends TimerTask
 	{
 		this.parent.packProperties();
 		this.parent.packPlayers();
-		// prolly gonna appear too often..		
-		System.out.println(getDateTime() + " [INFO] Combat save complete.");
 		// Start this again
 		this.timer = new Timer();
 		this.timer.schedule(new SaveCombat(parent), 10000L);

@@ -25,8 +25,6 @@ public class MixxitListener extends PluginListener
 	}
 
 	public int pvp = 0;
-	public PropertiesFile configProperties;
-	public PropertiesFile configPlayers;
 	public Timer timer;
 	public Timer saveTimer;
 	
@@ -58,7 +56,10 @@ public class MixxitListener extends PluginListener
 	public void packProperties()
 	{
 		// Packs all server settings into the configProperties file
+		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.properties");
+		configProperties.load();
 		configProperties.setInt("FFAPVP",this.pvp);
+		System.out.println(getDateTime() + " [INFO] MixxitPlugin settings saved.");
 		
 	}
 	
@@ -67,7 +68,8 @@ public class MixxitListener extends PluginListener
 		// Packs all players stored in ArrayList playerList
 		// into the configPlayers file
 		
-		
+		System.out.println(getDateTime() + " [INFO] MixxitPlugin player data saved.");
+
 	}
 	
 	public void setFFAPVP(int value)
