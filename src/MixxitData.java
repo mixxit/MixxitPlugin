@@ -7,12 +7,11 @@ import java.util.ArrayList;
  */
 public class MixxitData {
 	private static ArrayList<Mortal> users;
-	private static PropertiesFile userdata;
+	private static PropertiesFile userdata = new PropertiesFile("mixxitUsers.txt");;
 	
-	public static void populate() {
-		users = new ArrayList<Mortal>();
-		userdata = new PropertiesFile("mixxitUsers.txt");
-		userdata.load();
+	private static void populate() {
+		users = new ArrayList<Mortal>(); // Start a new list.
+		userdata.load(); // Reload from disk.
 		for (Player p : etc.getServer().getPlayerList()) {
 			addMortal(p);
 		}
@@ -20,13 +19,13 @@ public class MixxitData {
 
 	public static void saveToDisk() {
 		if (users == null) {
-			populate();
+			populate(); // Create the mortals list.
 		}
 
 		for (Mortal m : users) {
 			userdata.setString(m.name, m.toString());
 			if (etc.getServer().getPlayer(m.name) == null) {
-				users.remove(m);
+				users.remove(m); // Keep the list tidy. ^_^
 			}
 		}
 	}
@@ -34,11 +33,11 @@ public class MixxitData {
 	@SuppressWarnings("unused")
 	private static Mortal getMortal(Player player) {
 		if (users == null) {
-			populate();
+			populate(); // Create the mortals list.
 		}
 
 		for (Mortal m : users) {
-			if (m.name.endsWith(player.getName())) {
+			if (m.name.equals(player.getName())) {
 				return m;
 			}
 		}
@@ -47,7 +46,7 @@ public class MixxitData {
 	}
 
 	private static Mortal addMortal(Player player) {
-		String key = userdata.getString(player.getName(), "100|0|0");
+		String key = userdata.getString(player.getName(), new Mortal(player, "").toString());
 		Mortal meer = new Mortal(player, key);
 		users.add(meer);
 		return meer;
