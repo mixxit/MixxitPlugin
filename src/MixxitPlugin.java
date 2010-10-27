@@ -38,7 +38,7 @@ public class MixxitPlugin extends Plugin
 	 static int basedamage = 3;
 	
 	// Tom316 - MixxitPlugin's Properties files
-	private PropertiesFile properties = new PropertiesFile("Mixxitplugin.properties");
+	private PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
 	    
 	// Tom316 - Addition of Logger support so that our plugins info is tagged into the minecraft logfile.
 	static final Logger log = Logger.getLogger("Minecraft");

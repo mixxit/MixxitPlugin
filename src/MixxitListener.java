@@ -82,7 +82,7 @@ public class MixxitListener extends PluginListener
 	
 	public void packParameters()
 	{
-		PropertiesFile configProperties = new PropertiesFile("Mixxitplugin.properties");
+		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.properties");
 		configProperties.setBoolean("pvp", pvp);
 		configProperties.setBoolean("drop-inventory", dropinventory);
 		configProperties.setInt("combat-timer", Combattimer);
