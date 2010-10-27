@@ -80,7 +80,7 @@ public class MixxitListener extends PluginListener
 		
 		// Set save
 		this.saveTimer = new Timer();
-		this.timer.schedule(new SaveCombat(this), 10000L);
+		this.timer.schedule(new SaveCombat(this), 100000L);
 		System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
         System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Listener PVP:" + pvp);
 
@@ -93,7 +93,9 @@ public class MixxitListener extends PluginListener
 		
 		try {
 			String line;
-			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream("MixxitPlugin.txt"))));
+			DataInputStream in = new DataInputStream(new FileInputStream("MixxitPlugin.txt"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			
 			while ((line = br.readLine()) != null) {
 				// loop through each player
 				
@@ -128,6 +130,8 @@ public class MixxitListener extends PluginListener
 					
 				}
 			}
+			in.close();
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,6 +139,8 @@ public class MixxitListener extends PluginListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 		
 	}
 	
