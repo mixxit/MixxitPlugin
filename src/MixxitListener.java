@@ -96,6 +96,40 @@ public class MixxitListener extends PluginListener
 		
 	}
 	
+	public boolean onBlockCreate(Player player, Block BlockPlaced, Block blockClicked, int itemInHand)
+    {
+        if (player.getItemInHand() == 319)
+        {
+            setPlayerHP(player, getPlayerHP(player) + 2);
+        } else {
+            if (player.getItemInHand() == 320)
+            {
+                setPlayerHP(player, getPlayerHP(player) + 4);
+            } else {
+                if (player.getItemInHand() == 297)
+                {
+                    setPlayerHP(player, getPlayerHP(player) + 3);
+                } else {
+                    if (player.getItemInHand() == 260)
+                    {
+                        setPlayerHP(player, getPlayerHP(player) + 2);
+                    } else {
+                        if (player.getItemInHand() == 282)
+                        {
+                            setPlayerHP(player, getPlayerHP(player) + 6);
+                        } else {
+                            if (player.getItemInHand() == 322)
+                            {
+                                setPlayerHP(player, getPlayerHP(player) + 12);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }  
+	
 	public void loadPlayerList()
 	{
 		// populate the playerlist with previous data
@@ -653,7 +687,7 @@ public class MixxitListener extends PluginListener
 		for (Player p : etc.getServer().getPlayerList())
 		{
 			if (p != null) {
-				if (p.getName() == player.getName())
+				if (p.getName().equals(player.getName()) == true)
 				{
 				} else {
 					if (pvp == true)
