@@ -122,8 +122,9 @@ public class MixxitListener extends PluginListener
 					curplayer.exp = curexp;
 					curplayer.melee = curmelee;
 					
+					this.playerList.add(curplayer);
 					System.out.println(getDateTime() + " [DEBUG] new player: " + curplayer.name + " added with: " + curplayer.hp + ":" + curplayer.exp + ":" + curplayer.melee);
-
+					
 					
 				}
 			}
@@ -355,9 +356,13 @@ public class MixxitListener extends PluginListener
 	{
 		// check if the player exists
 		int exists = 0;
+		System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - PlayerListSize: " + this.playerList.size());    
+
 		for (int i = 0; i < this.playerList.size(); i++) {
+			System.out.println(getDateTime() + " [DEBUG] MixxitPlugin " + this.playerList.get(i).name + " against " + player.getName());    
 			if (this.playerList.get(i).name == player.getName())
 			{
+				exists = 1;
 				player.sendMessage("Welcome back! HP:" + getPlayerHP(player));
 			}
 		}
