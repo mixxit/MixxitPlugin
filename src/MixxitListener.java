@@ -207,7 +207,7 @@ public class MixxitListener extends PluginListener
 	public int getPlayerHP(Player player)
 	{
 		for (int i = 0; i < this.playerList.size(); i++) {
-			if (this.playerList.get(i).name == player.getName())
+			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				return this.playerList.get(i).hp;
 			}
@@ -218,7 +218,7 @@ public class MixxitListener extends PluginListener
 	public void setPlayerHP(Player player, Integer newhp)
 	{
 		for (int i = 0; i < this.playerList.size(); i++) {
-			if (this.playerList.get(i).name == player.getName())
+			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				this.playerList.get(i).hp = newhp;
 
@@ -229,7 +229,7 @@ public class MixxitListener extends PluginListener
 	public int getPlayerMelee(Player player)
 	{
 		for (int i = 0; i < this.playerList.size(); i++) {
-			if (this.playerList.get(i).name == player.getName())
+			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				return this.playerList.get(i).melee;
 			}
@@ -268,7 +268,7 @@ public class MixxitListener extends PluginListener
 	public void setCombatLog(Player player, int value)
 	{
 		for (int i = 0; i < this.playerList.size(); i++) {
-			if (this.playerList.get(i).name == player.getName())
+			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				this.playerList.get(i).combatlog = value;
 			}
@@ -278,7 +278,7 @@ public class MixxitListener extends PluginListener
 	public int getCombatLog(Player player)
 	{
 		for (int i = 0; i < this.playerList.size(); i++) {
-			if (this.playerList.get(i).name == player.getName())
+			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				return this.playerList.get(i).combatlog;
 			}
@@ -360,10 +360,13 @@ public class MixxitListener extends PluginListener
 
 		for (int i = 0; i < this.playerList.size(); i++) {
 			System.out.println(getDateTime() + " [DEBUG] MixxitPlugin " + this.playerList.get(i).name + " against " + player.getName());    
-			if (this.playerList.get(i).name == player.getName())
+			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				exists = 1;
+				System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - WELCOME BACK!!");    
 				player.sendMessage("Welcome back! HP:" + getPlayerHP(player));
+			} else {
+				System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - SKIPPED!");    
 			}
 		}
 
@@ -384,7 +387,7 @@ public class MixxitListener extends PluginListener
 		player.sendMessage("Pending experience...");
 		int playerfound = 0;
 		for (int i = 0; i < this.playerList.size(); i++) {
-			if (this.playerList.get(i).name == player.getName())
+			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				playerfound = 1;
 				this.playerList.get(i).exp = this.playerList.get(i).exp + amount;
