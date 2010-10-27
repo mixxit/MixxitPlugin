@@ -1,3 +1,6 @@
+// THIS IS NOT IN USE YET
+// PLEASE WAIT TILL CONVERTED
+
 import java.util.ArrayList;
 
 public class MixxitData {
@@ -6,7 +9,7 @@ public class MixxitData {
 
 	public static void populate() {
 		users = new ArrayList<Mortal>();
-		userdata = new PropertiesFile("MixxitPlugin.txt");
+		userdata = new PropertiesFile("MixxitPlugin2.txt");
 		userdata.load();
 		for (Player p : etc.getServer().getPlayerList()) {
 			addMortal(p);
