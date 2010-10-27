@@ -25,16 +25,58 @@ public class MixxitListener extends PluginListener
 	}
 
 	public int pvp = 0;
-
+	protected PropertiesFile configProperties;
+	protected PropertiesFile configPlayers;
 	public Timer timer;
+	public Timer saveTimer;
+	
 	public ArrayList<p1> playerList;
 	public MixxitListener()
 	{
+		
+		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.txt");
+		configProperties.load();
+
 		this.timer = new Timer();
 		// Tom316 increase time to schedule for server overload
 		this.timer.schedule(new RemindTask(this), 700L);
-		System.out.println(getDateTime() + " [INFO] Task Scheduled.");
+		System.out.println(getDateTime() + " [INFO] Melee Combat Task Scheduled.");
 		playerList = new ArrayList<p1>();
+		
+		// set current setting from txt file
+		setFFAPVP(getConfigFFAPVP());
+		
+		// Set save
+		this.saveTimer = new Timer();
+		this.timer.schedule(new SaveCombat(this), 10000L);
+		System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
+	}
+	
+	public void packPlayers()
+	{
+		// Packs all players stored in ArrayList playerList
+		// into the configPlayers file
+		
+		//foreach...
+		
+	}
+	
+	public void setFFAPVP(int value)
+	{
+		setConfigFFAPVP(value);
+		this.pvp = value;
+	}
+	
+	public void setConfigFFAPVP(int value)
+	{
+		// off by default
+		configProperties.setInt("FFAPVP", value);
+	}
+
+	public int getConfigFFAPVP()
+	{
+		// off by default if no value can be found
+		return configProperties.getInt("FFAPVP", 0);		
 	}
 
 	private String getDateTime()
@@ -184,7 +226,7 @@ public class MixxitListener extends PluginListener
 		if(split[0].equalsIgnoreCase("/pvpenable") && player.canUseCommand("/pvpenable"))
 		{
 			// Tom316 - Enable PVP by setting its value to 1
-			pvp = 1; // Tom316 - 0 = Disabled, 1 = Enabled
+			setFFAPVP(1); // Tom316 - 0 = Disabled, 1 = Enabled
 			player.sendMessage("PVP Enabled");
 			return true;
 		}
@@ -192,7 +234,7 @@ public class MixxitListener extends PluginListener
 		if(split[0].equalsIgnoreCase("/pvpdisable") && player.canUseCommand("/pvpdisable"))
 		{
 			// Tom316 - Disable PVP by setting its value to 0
-			pvp = 0; // Tom316 - 0 = Disabled, 1 = Enabled
+			setFFAPVP(0); // Tom316 - 0 = Disabled, 1 = Enabled
 			player.sendMessage("PVP Disabled");
 			return true;
 		}
