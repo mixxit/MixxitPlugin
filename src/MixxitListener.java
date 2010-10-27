@@ -100,27 +100,27 @@ public class MixxitListener extends PluginListener
     {
         if (player.getItemInHand() == 319)
         {
-            setPlayerHP(player, getPlayerHP(player) + 2);
+            setPlayerHP(player, getPlayerHP(player) + 20);
         } else {
             if (player.getItemInHand() == 320)
             {
-                setPlayerHP(player, getPlayerHP(player) + 4);
+                setPlayerHP(player, getPlayerHP(player) + 20);
             } else {
                 if (player.getItemInHand() == 297)
                 {
-                    setPlayerHP(player, getPlayerHP(player) + 3);
+                    setPlayerHP(player, getPlayerHP(player) + 20);
                 } else {
                     if (player.getItemInHand() == 260)
                     {
-                        setPlayerHP(player, getPlayerHP(player) + 2);
+                        setPlayerHP(player, getPlayerHP(player) + 10);
                     } else {
                         if (player.getItemInHand() == 282)
                         {
-                            setPlayerHP(player, getPlayerHP(player) + 6);
+                            setPlayerHP(player, getPlayerHP(player) + 30);
                         } else {
                             if (player.getItemInHand() == 322)
                             {
-                                setPlayerHP(player, getPlayerHP(player) + 12);
+                                setPlayerHP(player, getPlayerHP(player) + 40);
                             }
                         }
                     }
