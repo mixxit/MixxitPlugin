@@ -573,7 +573,7 @@ public class MixxitListener extends PluginListener
 				if (p.getName() == player.getName())
 				{
 				} else {
-					if (pvp = true)
+					if (pvp == true)
 					{
 						double dist = getPlayerDistance(player, p);
 						if (dist <= 2.0D)
