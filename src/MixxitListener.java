@@ -214,16 +214,12 @@ public class MixxitListener extends PluginListener
       }
 	  return 0;
   }
-    
-  public void DoPlayerDeath(Player player)
+  
+  public void DropPlayerItems(Player player)
   {
-	  // slain
-	  player.sendMessage("You have been slain");
-	  
-	  // delete items
-	  
+	  // drop items
 	  // Tom316 - Loop through the inventory slots removing each item.
-      for(int slot=9;slot<36;slot++)
+      for(int slot=0;slot<36;slot++)
       {
     	  // what's the item id?
     	  try {
@@ -248,8 +244,13 @@ public class MixxitListener extends PluginListener
       }
       // Tom316 - Make sure we send a inventory update to the player so there client gets the changes.
       player.getInventory().updateInventory();
-	  
+  }
+  public void DoPlayerDeath(Player player)
+  {
+	  // slain
+	  player.sendMessage("You have been slain");
       
+	  DropPlayerItems(player);
 	  // warp to spawn
       player.teleportTo(etc.getServer().getSpawnLocation());
       setPlayerHP(player,100);
