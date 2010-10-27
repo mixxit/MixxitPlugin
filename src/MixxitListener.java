@@ -106,8 +106,7 @@ public class MixxitListener extends PluginListener
       {
         p.sendMessage("You have been slain!");
 
-        Warp home = etc.getDataSource().getHome(p.getName());
-        p.teleportTo(home.Location);
+        p.teleportTo(etc.getServer().getSpawnLocation());
       }
       else {
         p.setHealth(p.getHealth() - thisdmg);
@@ -251,9 +250,8 @@ public class MixxitListener extends PluginListener
       player.getInventory().updateInventory();
 	  
       
-	  // warp home
-      Warp home = etc.getDataSource().getHome(player.getName());
-      player.teleportTo(home.Location);
+	  // warp to spawn
+      player.teleportTo(etc.getServer().getSpawnLocation());
       setPlayerHP(player,100);
 
   }
