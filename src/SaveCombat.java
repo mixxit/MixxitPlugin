@@ -28,9 +28,6 @@ class SaveCombat extends TimerTask
 		this.parent.packParameters();
 		
 		this.parent.packPlayers();
-		// Start this again
-		this.timer = new Timer();
-		this.timer.schedule(new SaveCombat(parent), 100000L);
 
 		
 	}

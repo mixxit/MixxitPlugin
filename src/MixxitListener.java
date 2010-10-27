@@ -72,15 +72,24 @@ public class MixxitListener extends PluginListener
 		this.timer = new Timer();
 		// Tom316 increase time to schedule for server overload
 		// get from Combattimer property
-		this.timer.schedule(new RemindTask(this), Combattimer);
+		//this.timer.schedule(new RemindTask(this), Combattimer);
+		
+		timer.scheduleAtFixedRate(new RemindTask(this), 0, Combattimer);
+		
 		System.out.println(getDateTime() + " [INFO] Melee Combat Task Scheduled.");
 		playerList = new ArrayList<p1>();
 		
 		loadPlayerList();
 		
 		// Set save
-		this.saveTimer = new Timer();
-		this.timer.schedule(new SaveCombat(this), 100000L);
+		//this.saveTimer = new Timer();
+		//this.timer.schedule(new SaveCombat(this), 100000L);
+		
+		
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new SaveCombat(this), 5000, 20000);
+		
+		
 		System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
         System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Listener PVP:" + pvp);
 
@@ -362,17 +371,13 @@ public class MixxitListener extends PluginListener
 	{
 		// check if the player exists
 		int exists = 0;
-		System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - PlayerListSize: " + this.playerList.size());    
 
 		for (int i = 0; i < this.playerList.size(); i++) {
-			System.out.println(getDateTime() + " [DEBUG] MixxitPlugin " + this.playerList.get(i).name + " against " + player.getName());    
 			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				exists = 1;
-				System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - WELCOME BACK!!");    
 				player.sendMessage("Welcome back! HP:" + getPlayerHP(player));
 			} else {
-				System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - SKIPPED!");    
 			}
 		}
 

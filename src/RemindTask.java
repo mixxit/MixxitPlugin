@@ -29,15 +29,20 @@ class RemindTask extends TimerTask
 
 			if ((parent.getPlayerHP(p) - thisdmg) < 1)
 			{
-				if (parent.getCombatLog(p) == 1)
+				if (m.getHealth() == 0)
 				{
-					p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + parent.getPlayerHP(p) + ")");
+					// do nothing
 				} else {
-					// supress the combat log
+					if (parent.getCombatLog(p) == 1)
+					{
+						p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + parent.getPlayerHP(p) + ")");
+					} else {
+						// supress the combat log
+					}
+	
+					// reset hp and warp to spawn
+					parent.DoPlayerDeath(p);
 				}
-
-				// reset hp and warp to spawn
-				parent.DoPlayerDeath(p);
 			} else {
 				if (m.getHealth() == 0)
 				{
@@ -101,10 +106,6 @@ class RemindTask extends TimerTask
 		{
 			// array modified mid use, skip for next turn
 		}
-
-		this.timer = new Timer();
-		// Tom316 increase time to schedule for server overload
-		this.timer.schedule(new RemindTask(parent), Combattimer);
 	}
 
 	private double getDistance(Player a, Mob b)
