@@ -12,7 +12,7 @@ public class MixxitPlugin extends Plugin
 	
 	
 	 static boolean pvp = false;
-	 static boolean dropinventory = false;
+	 static boolean dropinventory = true;
 	    
 	 static int Combattimer = 700;
 	 static int woodensword = 6;
@@ -73,7 +73,7 @@ public class MixxitPlugin extends Plugin
         try {
             // Tom316 - Pull out the information from our properties file.
             pvp = properties.getBoolean("pvp", false);
-            dropinventory = properties.getBoolean("drop-inventory", false);
+            dropinventory = properties.getBoolean("drop-inventory", true);
             Combattimer = properties.getInt("combat-timer", 700);
             woodensword = properties.getInt("wooden-sword", 6);
             stonesword = properties.getInt("stone-sword", 7);
