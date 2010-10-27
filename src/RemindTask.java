@@ -72,7 +72,6 @@ class RemindTask extends TimerTask
 					for (Player p : etc.getServer().getPlayerList()) {
 						DoMobCombat(m, p, 8);
 					}
-	
 				}
 	
 				if (m.getName() == "Zombie")
@@ -89,7 +88,7 @@ class RemindTask extends TimerTask
 					}
 				}
 				
-				if (m.getName() != "Skeleton")
+				if (m.getName() == "Skeleton")
 				{
 					for (Player p : etc.getServer().getPlayerList()) {
 						DoMobCombat(m, p, 5);
