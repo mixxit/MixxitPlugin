@@ -5,6 +5,7 @@ import java.util.Date;
 public class MixxitPlugin extends Plugin
 {
   private String name = "MixxitPlugin";
+  private String version = "1.12";
 
   static final MixxitListener listener = new MixxitListener();
 
@@ -24,7 +25,7 @@ public class MixxitPlugin extends Plugin
 	etc.getInstance().addCommand("/pvpdisable", "- Disable PVP");
 	etc.getInstance().addCommand("/heal", "- Sets you to full health");
 
-    System.out.println(getDateTime() + " [INFO] Solinia plugin enabled");    
+    System.out.println(getDateTime() + " [INFO] MixxitPlugin " + this.version + " enabled");    
   }
 
   public void disable()
