@@ -25,6 +25,8 @@ class SaveCombat extends TimerTask
 	
 	public void run()
 	{
+		this.parent.packParameters();
+		
 		this.parent.packPlayers();
 		// Start this again
 		this.timer = new Timer();

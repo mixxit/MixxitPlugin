@@ -80,13 +80,40 @@ public class MixxitListener extends PluginListener
 	}
 	
 	
+	public void packParameters()
+	{
+		PropertiesFile configProperties = new PropertiesFile("Mixxitplugin.properties");
+		configProperties.setBoolean("pvp", pvp);
+		configProperties.setBoolean("drop-inventory", dropinventory);
+		configProperties.setInt("combat-timer", Combattimer);
+		configProperties.setInt("wooden-sword", woodensword);
+		configProperties.setInt("stone-sword", stonesword);
+		configProperties.setInt("iron-sword", ironsword);
+		configProperties.setInt("gold-sword", goldsword);
+		configProperties.setInt("diamond-sword", diamondsword);
+		configProperties.setInt("wooden-spade", woodenspade);
+		configProperties.setInt("stone-spade", stonespade);
+		configProperties.setInt("iron-spade", ironspade);
+		configProperties.setInt("gold-spade", goldspade);
+		configProperties.setInt("diamond-spade", diamondspade);
+		configProperties.setInt("wooden-pickaxe", woodenpickaxe);
+		configProperties.setInt("stone-pickaxe", stonepickaxe);
+		configProperties.setInt("iron-pickaxe", ironpickaxe);
+		configProperties.setInt("gold-pickaxe", goldpickaxe);
+		configProperties.setInt("diamond-pickaxe", diamondpickaxe);
+		configProperties.setInt("wooden-axe", woodenaxe);
+		configProperties.setInt("stone-axe", stoneaxe);
+		configProperties.setInt("iron-axe", ironaxe);
+		configProperties.setInt("gold-axe", goldaxe);
+		configProperties.setInt("diamond-axe", diamondaxe);
+		System.out.println(getDateTime() + " [INFO] MixxitPlugin properties saved.");
+	}
+	
 	public void packPlayers()
 	{
 		// Packs all players stored in ArrayList playerList
 		// into the configPlayers file
-		
 		System.out.println(getDateTime() + " [INFO] MixxitPlugin player data saved.");
-
 	}
 	
 	private String getDateTime()
@@ -637,7 +664,7 @@ public class MixxitListener extends PluginListener
 							
 							if (getCombatLog(player) == 1)
 							{
-								player.sendMessage("You strike " + m.getName() + "HP(" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player));
+								player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player));
 							} else {
 								
 							}
