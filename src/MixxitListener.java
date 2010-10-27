@@ -381,7 +381,7 @@ public class MixxitListener extends PluginListener
 	      // slain
 	      player.sendMessage("You have been slain");
 	      
-	      if (dropinventory = true )
+	      if (dropinventory == true )
 	      {
 	          DropPlayerItems(player);
 	      }
