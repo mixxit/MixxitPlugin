@@ -25,8 +25,8 @@ public class MixxitListener extends PluginListener
 	}
 
 	public int pvp = 0;
-	protected PropertiesFile configProperties;
-	protected PropertiesFile configPlayers;
+	public PropertiesFile configProperties;
+	public PropertiesFile configPlayers;
 	public Timer timer;
 	public Timer saveTimer;
 	
@@ -44,7 +44,7 @@ public class MixxitListener extends PluginListener
 		playerList = new ArrayList<p1>();
 		
 		// set current setting from txt file
-		setFFAPVP(getConfigFFAPVP());
+		setFFAPVP(configProperties.getInt("FFAPVP", 0));
 		
 		PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
 		configPlayers.load();
@@ -55,31 +55,24 @@ public class MixxitListener extends PluginListener
 		System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
 	}
 	
+	public void packProperties()
+	{
+		// Packs all server settings into the configProperties file
+		configProperties.setInt("FFAPVP",this.pvp);
+		
+	}
+	
 	public void packPlayers()
 	{
 		// Packs all players stored in ArrayList playerList
 		// into the configPlayers file
 		
-		//foreach...
 		
 	}
 	
 	public void setFFAPVP(int value)
 	{
-		setConfigFFAPVP(value);
 		this.pvp = value;
-	}
-	
-	public void setConfigFFAPVP(int value)
-	{
-		// off by default
-		configProperties.setInt("FFAPVP", value);
-	}
-
-	public int getConfigFFAPVP()
-	{
-		// off by default if no value can be found
-		return configProperties.getInt("FFAPVP", 0);		
 	}
 
 	private String getDateTime()
