@@ -42,7 +42,7 @@ public class Mortal {
 		return key;
 	}
 	
-	private int getDefault(VarInt value) {
+	private static int getDefault(VarInt value) {
 		return defaultdata.getInt(value.toString(), 0);
 	}
 }
