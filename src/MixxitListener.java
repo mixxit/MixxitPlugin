@@ -34,7 +34,7 @@ public class MixxitListener extends PluginListener
 	public MixxitListener()
 	{
 		
-		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.txt");
+		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.properties");
 		configProperties.load();
 
 		this.timer = new Timer();
@@ -46,7 +46,7 @@ public class MixxitListener extends PluginListener
 		// set current setting from txt file
 		setFFAPVP(getConfigFFAPVP());
 		
-		PropertiesFile configPlayers = new PropertiesFile("MixxitPlayers.txt");
+		PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
 		configPlayers.load();
 		
 		// Set save
