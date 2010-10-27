@@ -29,7 +29,7 @@ class RemindTask extends TimerTask
 
 			if ((parent.getPlayerHP(p) - thisdmg) < 1)
 			{
-				if (m.getHealth() == 0)
+				if (m.getHealth() <= 0)
 				{
 					// do nothing
 				} else {
@@ -44,7 +44,7 @@ class RemindTask extends TimerTask
 					parent.DoPlayerDeath(p);
 				}
 			} else {
-				if (m.getHealth() == 0)
+				if (m.getHealth() <= 0)
 				{
 					// do nothing
 				} else {
