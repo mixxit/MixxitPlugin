@@ -152,8 +152,8 @@ public class MixxitListener extends PluginListener
 	
 	public void disableCombatLog(Player player)
 	{
-		player.sendMessage("Combat Log Enabled - to enable /enablecombatlog");			
-		setCombatLog(player,1);
+		player.sendMessage("Combat Log Disabled - to enable /enablecombatlog");			
+		setCombatLog(player,0);
 	}
 
 	// Tom316's pvp toggle and misc commands
@@ -253,10 +253,6 @@ public class MixxitListener extends PluginListener
 
 			}
 		}
-
-
-
-
 	}
 
 	public int PlayerHasHit(Player player)

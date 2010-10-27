@@ -1,6 +1,7 @@
 import java.text.DateFormat;
 
 import java.text.SimpleDateFormat;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
@@ -61,32 +62,44 @@ class RemindTask extends TimerTask
 	public void run()
 	{
 
-		for (Mob m : etc.getServer().getMobList()) {
-			if (m == null)
-				continue;
-			if (m.getName() == "Spider")
-			{
-				for (Player p : etc.getServer().getPlayerList()) {
-					DoMobCombat(m, p, 8);
+		try {
+			for (Mob m : etc.getServer().getMobList()) {
+				if (m == null)
+					continue;
+				
+				if (m.getName() == "Spider")
+				{
+					for (Player p : etc.getServer().getPlayerList()) {
+						DoMobCombat(m, p, 8);
+					}
+	
+				}
+	
+				if (m.getName() == "Zombie")
+				{
+					for (Player p : etc.getServer().getPlayerList()) {
+						DoMobCombat(m, p, 4);
+					}
 				}
 
-			}
-
-			if (m.getName() == "Zombie")
-			{
-				for (Player p : etc.getServer().getPlayerList()) {
-					DoMobCombat(m, p, 4);
+				if (m.getName() == "Creeper")
+				{
+					for (Player p : etc.getServer().getPlayerList()) {
+						DoMobCombat(m, p, 2);
+					}
+				}
+				
+				if (m.getName() != "Skeleton")
+				{
+					for (Player p : etc.getServer().getPlayerList()) {
+						DoMobCombat(m, p, 5);
+					}
 				}
 			}
-
-			if (m.getName() != "Skeleton")
-			{
-				continue;
-			}
-			for (Player p : etc.getServer().getPlayerList()) {
-				DoMobCombat(m, p, 5);
-			}
-
+		}
+		catch(ConcurrentModificationException e)
+		{
+			// array modified mid use, skip for next turn
 		}
 
 		this.timer = new Timer();
