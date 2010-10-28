@@ -17,6 +17,7 @@ public class MixxitListener extends PluginListener
   public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
 
   boolean pvp = false;
+  boolean pvpteams = true;
   boolean dropinventory = true;
 
   public int totaldmg = 0;
@@ -80,6 +81,7 @@ public class MixxitListener extends PluginListener
     try
     {
       this.pvp = this.properties.getBoolean("pvp", false);
+      this.pvpteams = this.properties.getBoolean("pvpteams", true);
       this.dropinventory = this.properties.getBoolean("drop-inventory", true);
       this.Combattimer = this.properties.getInt("combat-timer", 700);
       this.woodensword = this.properties.getInt("wooden-sword", 6);
@@ -138,10 +140,17 @@ public class MixxitListener extends PluginListener
           int curexp = Integer.parseInt(params[1]);
 
           int curmelee = Integer.parseInt(params[2]);
+          
+          int curlevel = Integer.parseInt(params[3]);
+          
+          int curfaction = Integer.parseInt(params[4]);
 
           MixxitListener.p1 curplayer = new MixxitListener.p1(tokens[0], curhp);
           curplayer.exp = curexp;
           curplayer.melee = curmelee;
+          curplayer.level = curlevel;
+          curplayer.faction = curfaction;
+          
 
           this.playerList.add(curplayer);
           System.out.println(getDateTime() + " [DEBUG] new player: " + curplayer.name + " added with: " + curplayer.hp + ":" + curplayer.exp + ":" + curplayer.melee);
@@ -168,7 +177,7 @@ public class MixxitListener extends PluginListener
   {
     PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
     for (int i = 0; i < this.playerList.size(); i++) {
-      String playerData = ((MixxitListener.p1)this.playerList.get(i)).hp + ":" + ((MixxitListener.p1)this.playerList.get(i)).exp + ":" + ((MixxitListener.p1)this.playerList.get(i)).melee;
+      String playerData = ((MixxitListener.p1)this.playerList.get(i)).hp + ":" + ((MixxitListener.p1)this.playerList.get(i)).exp + ":" + ((MixxitListener.p1)this.playerList.get(i)).melee + ":" + ((MixxitListener.p1)this.playerList.get(i)).level + ":" + ((MixxitListener.p1)this.playerList.get(i)).faction;
       configPlayers.setString(((MixxitListener.p1)this.playerList.get(i)).name, playerData);
     }
   }
@@ -212,7 +221,14 @@ public class MixxitListener extends PluginListener
     for (int i = 0; i < this.playerList.size(); i++) {
       if (!((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
         continue;
-      ((MixxitListener.p1)this.playerList.get(i)).hp = newhp.intValue();
+      int finalhp;
+      if (newhp.intValue() > 100)
+      {
+          finalhp = 100;
+      } else {
+    	  finalhp = newhp.intValue();
+      }
+      ((MixxitListener.p1)this.playerList.get(i)).hp = finalhp;
     }
   }
 
@@ -253,7 +269,81 @@ public class MixxitListener extends PluginListener
       }
     }
   }
+  
+  public int getPlayerLevel(Player player)
+  {
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        return ((MixxitListener.p1)this.playerList.get(i)).level;
+	      }
+	    }
+	    return -1;
+  }
 
+  public void setPlayerLevel(Player player, int level)
+  {
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        ((MixxitListener.p1)this.playerList.get(i)).level = level;
+	      }
+	    }
+  }
+  
+  public boolean isPlayerPVP(Player player)
+  {
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        if (((MixxitListener.p1)this.playerList.get(i)).faction > 0)
+	        {
+	        	return true;
+	        }
+	      }
+	    }
+	    return false;
+  }
+
+  
+  public int getPlayerFaction(Player player)
+  {
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        return ((MixxitListener.p1)this.playerList.get(i)).faction;
+	      }
+	    }
+	    return -1;
+  }
+
+  public void setPlayerFaction(Player player, int faction)
+  {
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	    	  	if (faction == 0)
+	    	  	{
+	    	  		((MixxitListener.p1)this.playerList.get(i)).faction = faction;
+		        	player.sendMessage("Your have joined the ranks of the Civilians. Phew!");
+	    	  	}
+	    	  	
+	    	  
+	    	  	if (faction == 1)
+	    	  	{
+	    	  		((MixxitListener.p1)this.playerList.get(i)).faction = faction;
+		        	player.sendMessage("Your have joined the ranks of the Villains!");
+	    	  	}
+
+	    	  	if (faction == 2)
+	    	  	{
+	    	  		((MixxitListener.p1)this.playerList.get(i)).faction = faction;
+	        		player.sendMessage("You have joined the ranks of the Heroes!");
+	    	  	}
+	      }
+	    }
+  }
+  
   public void setCombatLog(Player player, int value)
   {
     for (int i = 0; i < this.playerList.size(); i++) {
@@ -319,7 +409,7 @@ public class MixxitListener extends PluginListener
     if ((split[0].equalsIgnoreCase("/pvpenable")) && (player.canUseCommand("/pvpenable")))
     {
       this.pvp = true;
-      player.sendMessage("PVP Enabled");
+      player.sendMessage("PVP Free-for-all Enabled");
       return true;
     }
 
@@ -348,8 +438,22 @@ public class MixxitListener extends PluginListener
       return true;
     }
 
+    if ((split[0].equalsIgnoreCase("/level")) && (player.canUseCommand("/level")))
+    {
+      player.sendMessage("Level: " + this.getPlayerLevel(player));
+
+      return true;
+    }
+ 
+    if ((split[0].equalsIgnoreCase("/setfaction")) && (player.canUseCommand("/setfaction")))
+    {
+    	setPlayerFaction(player, Integer.parseInt(split[1]));
+      return true;
+    }
+    
     return false;
   }
+  
 
   public void onLogin(Player player)
   {
@@ -365,7 +469,7 @@ public class MixxitListener extends PluginListener
     if (exists == 0)
     {
       MixxitListener.p1 play = new MixxitListener.p1(player.getName(), 100);
-
+      
       this.playerList.add(play);
       player.sendMessage("Welcome, you have been registered by the hp system! HP: " + getPlayerHP(player));
     }
@@ -634,8 +738,17 @@ public class MixxitListener extends PluginListener
         (p.getName() == player.getName())) {
         continue;
       }
-      if (!this.pvp)
+      if (!this.pvp && !this.pvpteams)
         continue;
+     
+      if (pvpteams)
+      {
+    	  if (isPlayerPVP(p) == false)
+    		  continue;
+    	  if (isPlayerPVP(player) == false)
+    		  continue;
+      }
+      
       double dist = getPlayerDistance(player, p);
       if (dist > 2.0D)
         continue;
@@ -785,7 +898,8 @@ public class MixxitListener extends PluginListener
     public int hp;
     public int exp = 0;
     public int melee = 0;
-
+    public int level = 0;
+    public int faction = 0;
     public int combatlog = 1;
 
     public p1(String name, int hp)

@@ -29,6 +29,8 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().addCommand("/disablecombatlog", "- Disables your combat log");
     etc.getInstance().addCommand("/compressedcombatlog", "- Compresses your combat messages");
     etc.getInstance().addCommand("/MixxitDebug", "-Debug Information for MixxitPlugin");
+    etc.getInstance().addCommand("/setfaction", "-Sets your PVP Faction 0=None,1=Red,2=Blue");
+    etc.getInstance().addCommand("/level", "-Shows your level");
     listener = new MixxitListener();
     System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " enabled");
   }
@@ -43,6 +45,8 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().removeCommand("/disablecombatlog");
     etc.getInstance().removeCommand("/compressedcombatlog");
     etc.getInstance().removeCommand("/MixxitDebug");
+    etc.getInstance().removeCommand("/setteam");
+    etc.getInstance().removeCommand("/level");
 
     System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " disabled");
   }
