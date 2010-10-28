@@ -70,10 +70,7 @@ public class MixxitListener extends PluginListener
     loadPlayerList();
     loadProperties();
 
-    Timer timer = new Timer();
-    timer.scheduleAtFixedRate(new SaveCombat(this), 5000L, 20000L);
 
-    System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
   }
 
   public void loadProperties()
@@ -124,7 +121,6 @@ public class MixxitListener extends PluginListener
       String line;
       while ((line = br.readLine()) != null)
       {
-        String line;
         if (line.substring(0, 1).matches("[#]"))
         {
           System.out.println(getDateTime() + " [DEBUG] Comment Skipped");
@@ -579,6 +575,12 @@ public class MixxitListener extends PluginListener
     index++;
 
     return index;
+  }
+  
+  public void onDisconnect(Player player)
+  {
+	  	SaveCombat saver = new SaveCombat(this);
+	  	
   }
 
   public void onArmSwing(Player player)
