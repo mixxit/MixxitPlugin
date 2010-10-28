@@ -10,8 +10,6 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
 
 public class MixxitListener extends PluginListener
 {
@@ -32,41 +30,58 @@ public class MixxitListener extends PluginListener
 		}
 	}
 
-	 // Tom316 - Pull our variables over from MixxitPlugin.java where we load in all the information from the properties file.
-    boolean pvp = MixxitPlugin.pvp;
-    boolean dropinventory = MixxitPlugin.dropinventory;
-    int Combattimer = MixxitPlugin.Combattimer;
-    
-    int woodensword = MixxitPlugin.woodensword;
-    int stonesword = MixxitPlugin.stonesword;
-    int ironsword = MixxitPlugin.ironsword;
-    int goldsword = MixxitPlugin.goldsword;
-    int diamondsword = MixxitPlugin.diamondsword;
-    
-    int woodenspade = MixxitPlugin.woodenspade;
-    int stonespade = MixxitPlugin.stonespade;
-    int ironspade = MixxitPlugin.ironspade;
-    int goldspade = MixxitPlugin.goldspade;
-    int diamondspade = MixxitPlugin.diamondspade;
-    
-    int woodenpickaxe = MixxitPlugin.woodenpickaxe;
-    int stonepickaxe = MixxitPlugin.stonepickaxe;
-    int ironpickaxe = MixxitPlugin.ironpickaxe;
-    int goldpickaxe = MixxitPlugin.goldpickaxe;
-    int diamondpickaxe = MixxitPlugin.diamondpickaxe;
-    
-    int woodenaxe = MixxitPlugin.woodenaxe;
-    int stoneaxe = MixxitPlugin.stoneaxe;
-    int ironaxe = MixxitPlugin.ironaxe;
-    int goldaxe = MixxitPlugin.goldaxe;
-    int diamondaxe = MixxitPlugin.diamondaxe;
-    
-    int basedamage = MixxitPlugin.basedamage;
+	// Tom316 - MixxitPlugin's Properties files
+	public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
+	 
+	 // Tom316 - Default in some base values incase there is no values in our .properties file.
+	 boolean pvp = false;
+	 boolean dropinventory = true;
+	 
+	 // Tom316 - Total damage tracking for compressed log.
+	 public int totaldmg = 0;
+	 public int totalplydmg = 0;
+	 public int countcompress2 = 0;
+	 public int countcompress3 = 0;
+	 public int countcompress4 = 0;
+	 public int countcompress5 = 0;
+		
+	 // Tom316 - Combat Timer
+	 int Combattimer = 700;
+	 
+	 // Tom316 - Base Damage Values
+	 int woodensword = 6;
+	 int stonesword = 7;
+	 int ironsword = 8;
+	 int goldsword = 10;
+	 int diamondsword = 20;
+	 int woodenspade = 4;
+	 int stonespade = 5;
+	 int ironspade = 6;
+	 int goldspade = 8;
+	 int diamondspade = 10;
+	 int woodenpickaxe = 4;
+	 int stonepickaxe = 5;
+	 int ironpickaxe = 6;
+	 int goldpickaxe = 8;
+	 int diamondpickaxe = 10;
+	 int woodenaxe = 5;
+	 int stoneaxe = 6;
+	 int ironaxe = 7;
+	 int goldaxe = 10;
+	 int diamondaxe = 18;
+	 int basedamage = 3;
+	 
+	 // Tom316 - Base Healing Values
+	 int goldenapple = 100;
+	 int friedbacon = 20;
+	 int apple = 10;
+	 int bread = 15;
     
 	public Timer timer;
 	public Timer saveTimer;
 	
 	public ArrayList<p1> playerList;
+	
 	public MixxitListener()
 	{
 		this.timer = new Timer();
@@ -80,6 +95,7 @@ public class MixxitListener extends PluginListener
 		playerList = new ArrayList<p1>();
 		
 		loadPlayerList();
+		loadProperties(); // Tom316 - Call our loadProperties Function.
 		
 		// Set save
 		//this.saveTimer = new Timer();
@@ -91,13 +107,56 @@ public class MixxitListener extends PluginListener
 		
 		
 		System.out.println(getDateTime() + " [INFO] Combat saving scheduled.");
-        System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Listener PVP:" + pvp);
+		// TODO: Need to add a debug variable and tag these into it
+        //System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Listener PVP:" + pvp);
 
 		
 	}
 	
-	public boolean onBlockCreate(Player player, Block BlockPlaced, Block blockClicked, int itemInHand)
+	// Tom316 - New Home for our load fuction.
+	public void loadProperties()
     {
+<<<<<<< HEAD
+        properties = new PropertiesFile("MixxitPlugin.properties");
+        properties.load();
+        try {
+            // Tom316 - Pull out the information from our properties file.
+            pvp = properties.getBoolean("pvp", false);
+            dropinventory = properties.getBoolean("drop-inventory", true);
+            Combattimer = properties.getInt("combat-timer", 700);
+            woodensword = properties.getInt("wooden-sword", 6);
+            stonesword = properties.getInt("stone-sword", 7);
+            ironsword = properties.getInt("iron-sword", 8);
+            goldsword = properties.getInt("gold-sword", 10);
+            diamondsword = properties.getInt("diamond-sword", 20);
+            woodenspade = properties.getInt("wooden-spade", 4);
+            stonespade = properties.getInt("stone-spade", 5);
+            ironspade = properties.getInt("iron-spade", 6);
+            goldspade = properties.getInt("gold-spade", 8);
+            diamondspade = properties.getInt("diamond-spade", 10);
+            woodenpickaxe = properties.getInt("wooden-pickaxe", 4);
+            stonepickaxe = properties.getInt("stone-pickaxe", 5);
+            ironpickaxe = properties.getInt("iron-pickaxe", 6);
+            goldpickaxe = properties.getInt("gold-pickaxe", 8);
+            diamondpickaxe = properties.getInt("diamond-pickaxe", 10);
+            woodenaxe = properties.getInt("wooden-axe", 5);
+            stoneaxe = properties.getInt("stone-axe", 6);
+            ironaxe = properties.getInt("iron-axe", 7);
+            goldaxe = properties.getInt("gold-axe", 10);
+            diamondaxe = properties.getInt("diamond-axe", 18);
+       	 	goldenapple = properties.getInt("goldenapple", 100);
+       	 	friedbacon = properties.getInt("friedbacon", 20);
+       	 	apple = properties.getInt("apple", 10);
+       	 	bread = properties.getInt("bread", 15);
+       	 	
+       	 	// TODO: Add a Debug value on only display these when its enabled.
+            //System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Properties Loader: pvp = " + this.pvp);
+            //System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Properties Loader: drop inventory = " + this.dropinventory);
+            //System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Properties Loader: combat timer = " + this.Combattimer);
+            
+        } catch (Exception e) {
+            
+=======
         if (player.getItemInHand() == 319)
         {
             setPlayerHP(player, getPlayerHP(player) + 20);
@@ -126,9 +185,11 @@ public class MixxitListener extends PluginListener
                     }
                 }
             }
+>>>>>>> remotes/origin/master
         }
-        return false;
-    }  
+        // TODO : non-existant file
+        //System.out.println(getDateTime() + " [DEBUG] MixxitPlugin - Properties Loader: mixxitplugin.properties NOT FOUND!");
+    } 
 	
 	public void loadPlayerList()
 	{
@@ -189,6 +250,7 @@ public class MixxitListener extends PluginListener
 	
 	public void packParameters()
 	{
+		/*
 		PropertiesFile configProperties = new PropertiesFile("MixxitPlugin.properties");
 		configProperties.setBoolean("pvp", pvp);
 		configProperties.setBoolean("drop-inventory", dropinventory);
@@ -213,6 +275,7 @@ public class MixxitListener extends PluginListener
 		configProperties.setInt("iron-axe", ironaxe);
 		configProperties.setInt("gold-axe", goldaxe);
 		configProperties.setInt("diamond-axe", diamondaxe);
+		*/
 		// too spammy
 		//System.out.println(getDateTime() + " [INFO] MixxitPlugin properties saved.");
 	}
@@ -295,13 +358,14 @@ public class MixxitListener extends PluginListener
 			Random generator = new Random();
 			int index = generator.nextInt(basedamage);
 			int thisdmg = index;
-
+			
 			if (getCombatLog(p) == 1)
 			{
 				p.sendMessage("The " + m.getName() + " hit you back! For " + thisdmg + " damage! (CurrHP: " + p.getHealth() + ")");				
 			} else {
 				// Suppress the combat message, they've disabled it
 			}
+			
 			if (p.getHealth() < thisdmg)
 			{
 				p.sendMessage("You have been slain!");
@@ -349,6 +413,12 @@ public class MixxitListener extends PluginListener
 		setCombatLog(player,0);
 	}
 
+	public void compressedCombatLog(Player player)
+	{
+		player.sendMessage("Combat Log Compressed");			
+		setCombatLog(player,2);
+	}
+	
 	// Tom316's pvp toggle and misc commands
 
 	public boolean onCommand(Player player, String[] split)
@@ -356,7 +426,7 @@ public class MixxitListener extends PluginListener
 		if(split[0].equalsIgnoreCase("/health") && player.canUseCommand("/health"))
 		{
 			// Tom316 - Send a message to the player with his HP Value
-			player.sendMessage("HP:" + getPlayerHP(player));
+			player.sendMessage("HP: " + getPlayerHP(player));
 			return true;
 		}
 		
@@ -370,6 +440,12 @@ public class MixxitListener extends PluginListener
 		{
 			// Enable combat log for the player
 			disableCombatLog(player);
+			return true;
+		}
+		if(split[0].equalsIgnoreCase("/compressedcombatlog") && player.canUseCommand("/compressedcombatlog"))
+		{
+			// Enable combat log for the player
+			compressedCombatLog(player);
 			return true;
 		}
 
@@ -397,6 +473,17 @@ public class MixxitListener extends PluginListener
 			player.sendMessage("You have been fully healed. HP:" + getPlayerHP(player));
 			return true;
 		}
+		// Tom316 - Mixxit Debug Command
+		if(split[0].equalsIgnoreCase("/MixxitDebug") && player.canUseCommand("/MixxitDebug"))
+		{
+			player.sendMessage("You have been fully healed. HP: " + getPlayerHP(player));
+			// TODO: Tom316 - Add DEBUG Variable and break these out into it.
+            player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: pvp = " + this.pvp);
+            player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: drop inventory = " + this.dropinventory);
+            player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: combat timer = " + this.Combattimer);
+            
+			return true;
+		}
 
 		return false;
 	}
@@ -410,7 +497,7 @@ public class MixxitListener extends PluginListener
 			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
 				exists = 1;
-				player.sendMessage("Welcome back! HP:" + getPlayerHP(player));
+				player.sendMessage("Welcome back! HP: " + getPlayerHP(player));
 			} else {
 			}
 		}
@@ -420,7 +507,7 @@ public class MixxitListener extends PluginListener
 			p1 play = new p1(player.getName(),100);
 
 			this.playerList.add(play);
-			player.sendMessage("Welcome, you have been registered by the hp system! HP:" + getPlayerHP(player));
+			player.sendMessage("Welcome, you have been registered by the hp system! HP: " + getPlayerHP(player));
 		}
 		// register the player
 		//  MixxitListener.p1 thisplayer = new MixxitListener.p1(player.getName(),"100");
@@ -430,11 +517,11 @@ public class MixxitListener extends PluginListener
 	public void GiveExperience(Player player, int amount)
 	{
 		player.sendMessage("Pending experience...");
-		int playerfound = 0;
+		//int playerfound = 0;
 		for (int i = 0; i < this.playerList.size(); i++) {
 			if (this.playerList.get(i).name.equals(player.getName()) == true)
 			{
-				playerfound = 1;
+				//playerfound = 1;
 				this.playerList.get(i).exp = this.playerList.get(i).exp + amount;
 				player.sendMessage("§eYou gain experience (" + this.playerList.get(i).exp + ")!");
 				Random generator = new Random();
@@ -474,7 +561,6 @@ public class MixxitListener extends PluginListener
 				Item item = player.getInventory().getItemFromSlot(slot);
 				int itemid = item.getItemId();
 				int amount = item.getAmount();
-
 
 				// dupe the item to the location of the player
 				player.giveItemDrop(itemid, amount);
@@ -662,6 +748,7 @@ public class MixxitListener extends PluginListener
 
 	public int getPlayerDamage(Player player)
 	{
+		
 		// what are they holding? (if anything)
 		int itemId = player.getItemInHand();
 		// default base damage is 3 if no item is found
@@ -682,12 +769,58 @@ public class MixxitListener extends PluginListener
 
 	public void onArmSwing(Player player)
 	{
-
+		
+		// Tom316 - New Food based Healing system
+		// We hook here in onArmSwing.
+		// Code Originally by Oslarathos
+		int iteminhand = player.getItemInHand();
+		
+		if ( iteminhand == 297 || iteminhand == 260 || iteminhand == 320 || iteminhand == 322 )
+		{
+			String item = "";
+			
+			if ( iteminhand == 322 ) 
+			{
+				setPlayerHP(player,100);
+				player.sendMessage( "The golden apple heals you to full health." );
+			}
+			
+			if ( iteminhand == 320 ) 
+			{
+				setPlayerHP(player, getPlayerHP(player) + 20);
+				item = "fried bacon";
+			}
+			
+			if ( iteminhand == 260 ) 
+			{
+				setPlayerHP(player, getPlayerHP(player) + 10);
+				item = "apple";
+			}
+			
+			if ( iteminhand == 297 ) 
+			{
+				setPlayerHP(player, getPlayerHP(player) + 15);
+				item = "bread";
+			}
+			
+			if ( getPlayerHP(player) < 100 ) 
+			{
+				player.sendMessage( "The " + item + " heals you to " + player.getHealth() + "." );
+			} else {
+				player.sendMessage( "The " + item + " heals you to full health." );
+				setPlayerHP(player,100);
+			}
+			
+			Inventory inv = player.getInventory();
+			inv.removeItem( new Item( iteminhand, 1 ) );
+			inv.updateInventory();
+		}
+		
 		// Player trying to hit player player
 		for (Player p : etc.getServer().getPlayerList())
 		{
 			if (p != null) {
-				if (p.getName().equals(player.getName()) == true)
+				if (p.getName() == player.getName())
 				{
 				} else {
 					if (pvp == true)
@@ -713,11 +846,24 @@ public class MixxitListener extends PluginListener
 								// hit
 								// Get player damage
 								int thisdmg = getPlayerDamage(player);
-
+								totaldmg = totaldmg + thisdmg;
+								
 								if (getCombatLog(player) == 1)
 								{
 									player.sendMessage("You strike " + p.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(player) + " Their HP: " + getPlayerHP(p));
 								} else {
+									if (getCombatLog(player) == 2)
+									{
+										if (countcompress4 == 4)
+										{
+											// TODO: Cleanup wording
+											player.sendMessage("Total damage done " + totaldmg + ". Current Health: " + getPlayerHP(player) + ".");
+											countcompress4 = 0;
+											totaldmg = 0;
+										}else{
+											countcompress4 = countcompress4 + 1;
+										}
+									}
 									// Supress the combat log
 								}
 								if (getPlayerHP(p) < thisdmg)
@@ -728,10 +874,26 @@ public class MixxitListener extends PluginListener
 									DoPlayerDeath(p);
 								} else {
 									setPlayerHP(p,getPlayerHP(p) - thisdmg);
+									totalplydmg = totalplydmg + thisdmg;
 									if (getCombatLog(p) == 1)
 									{
 										p.sendMessage("§cYou have been hit by " + player.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(p) + " Their HP: " + getPlayerHP(player));
 									} else {
+										// Tom316 - Compress Combat Log...
+										if (getCombatLog(p) == 2)
+										{
+											if (countcompress5 == 4)
+											{
+												
+												p.sendMessage("Total damage recieved " + totalplydmg + " from " + player.getName() + ". Current Health: " + getPlayerHP(p) + ".");
+												countcompress5 = 0;
+												totalplydmg = 0;
+											}else{
+												countcompress5 = countcompress5 + 1;
+												// Tom316 - Debug Info
+												//p.sendMessage("Spot 2 -CountCompress1 = " + countcompress1 );
+											}
+										}
 										// Supress the combat log
 									}
 								}
@@ -766,6 +928,19 @@ public class MixxitListener extends PluginListener
 								player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player));
 							} else {
 								// supress the combat log
+								// Tom316 - Compress Combat Log...
+								if (getCombatLog(player) == 2)
+								{
+									if (countcompress3 == 6)
+									{
+										// TODO: Cleanup wording
+										player.sendMessage("You have missed " + countcompress3 + " times. Current Health: " + getPlayerHP(player) + ".");
+										countcompress3 = 0;
+
+									}else{
+										countcompress3 = countcompress3 + 1;
+									}
+								}
 							}
 						}
 					} else {
@@ -779,10 +954,26 @@ public class MixxitListener extends PluginListener
 							// Get player damage
 							int thisdmg = getPlayerDamage(player);
 							
+							// Tom316 - Used for compressed combat log.
+							totaldmg = totaldmg + thisdmg;
+							
 							if (getCombatLog(player) == 1)
 							{
 								player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player));
 							} else {
+								// Tom316 - Compress Combat Log...
+								if (getCombatLog(player) == 2)
+								{
+									if (countcompress2 == 4)
+									{
+										// TODO: Cleanup wording
+										player.sendMessage("Total damage done " + totaldmg + ". Current Health: " + getPlayerHP(player) + ".");
+										countcompress2 = 0;
+										totaldmg = 0;
+									}else{
+										countcompress2 = countcompress2 + 1;
+									}
+								}
 								
 							}
 							if (m.getHealth() <= thisdmg)

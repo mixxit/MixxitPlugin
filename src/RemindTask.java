@@ -1,8 +1,4 @@
-import java.text.DateFormat;
-
-import java.text.SimpleDateFormat;
 import java.util.ConcurrentModificationException;
-import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,8 +6,10 @@ class RemindTask extends TimerTask
 {
 	Timer timer;
 	MixxitListener parent;
-	int Combattimer = MixxitPlugin.Combattimer;
 	
+	public int countcompress1 = 0;
+	public int totalmobdmg = 0;
+	 
 	public RemindTask(MixxitListener parent)
 	{
 		this.parent = parent;
@@ -20,16 +18,18 @@ class RemindTask extends TimerTask
 	public void DoMobCombat(Mob m, Player p, int basedamage)
 	{
 		double dist = getDistance(p, m);
-		int playerentry = 0;
+
 		if (dist <= 2.0D)
 		{
 			Random generator = new Random();
 			int index = generator.nextInt(basedamage);
 			int thisdmg = index;
 
+			totalmobdmg = totalmobdmg + thisdmg;
+			
 			if ((parent.getPlayerHP(p) - thisdmg) < 1)
 			{
-				if (m.getHealth() <= 0)
+				if (m.getHealth() == 0)
 				{
 					// do nothing
 				} else {
@@ -38,13 +38,28 @@ class RemindTask extends TimerTask
 						p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + parent.getPlayerHP(p) + ")");
 					} else {
 						// supress the combat log
+						// Tom316 - Compress Combat Log...
+						if (parent.getCombatLog(p) == 2)
+						{
+							if (countcompress1 == 4)
+							{
+
+								p.sendMessage("Total damage recieved " + totalmobdmg + ". Current Health: " + parent.getPlayerHP(p) + ".");
+								countcompress1 = 0;
+								totalmobdmg = 0;
+							}else{
+								countcompress1 = countcompress1 + 1;
+								// Tom316 - Debug info
+								//p.sendMessage("Spot 1 - CountCompress1 = " + countcompress1 );
+							}
+						}
 					}
-	
+
 					// reset hp and warp to spawn
 					parent.DoPlayerDeath(p);
 				}
 			} else {
-				if (m.getHealth() <= 0)
+				if (m.getHealth() == 0)
 				{
 					// do nothing
 				} else {
@@ -54,6 +69,22 @@ class RemindTask extends TimerTask
 					{
 						p.sendMessage("§cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + parent.getPlayerHP(p) + ")");
 					} else {
+						// Tom316 - Compress Combat Log...
+						if (parent.getCombatLog(p) == 2)
+						{
+							if (countcompress1 == 4)
+							{
+								
+								p.sendMessage("Total damage recieved " + totalmobdmg + ". Current Health: " + parent.getPlayerHP(p) + ".");
+								countcompress1 = 0;
+								totalmobdmg = 0;
+							}else{
+								countcompress1 = countcompress1 + 1;
+								// Tom316 - Debug Info
+								//p.sendMessage("Spot 2 -CountCompress1 = " + countcompress1 );
+							}
+						}
+						
 						// supress the combat log
 					}
 				}
@@ -73,28 +104,28 @@ class RemindTask extends TimerTask
 				if (m == null)
 					continue;
 				
-				if (m.getName().equals("Spider") == true)
+				if (m.getName() == "Spider")
 				{
 					for (Player p : etc.getServer().getPlayerList()) {
 						DoMobCombat(m, p, 8);
 					}
 				}
 	
-				if (m.getName().equals("Zombie") == true)
+				if (m.getName() == "Zombie")
 				{
 					for (Player p : etc.getServer().getPlayerList()) {
 						DoMobCombat(m, p, 4);
 					}
 				}
 
-				if (m.getName().equals("Creeper") == true)
+				if (m.getName() == "Creeper")
 				{
 					for (Player p : etc.getServer().getPlayerList()) {
 						DoMobCombat(m, p, 2);
 					}
 				}
 				
-				if (m.getName().equals("Skeleton") == true)
+				if (m.getName() == "Skeleton")
 				{
 					for (Player p : etc.getServer().getPlayerList()) {
 						DoMobCombat(m, p, 5);
