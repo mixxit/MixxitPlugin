@@ -1,5 +1,7 @@
 Version 1.14
 * (Tom316) - Updated to 1.14
+* reduced combat spam additions via the /compressedcombatlog command
+* healing items changed to use the onArmSwing method.
 
 Version 1.13
 * mobs will now attack those in radius
