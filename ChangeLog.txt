@@ -1,0 +1,38 @@
+Version 1.14
+* (Tom316) - Updated to 1.14
+
+Version 1.13
+* mobs will now attack those in radius
+* coloured text update
+* less than 0 hp fixes
+* added a temporary hp system for players (default 100hitpoints)
+* pigs etc wont attack back
+* added experience
+* added melee skillups
+* added chance to miss based on melee skill
+* added pvp option
+* added choice to enable/disable pvp (thanks tom)
+* added increase to schedules for timeout problems (thanks tom!)
+* added new commands to check hp (thanks tom!)
+* added item dropping at location
+* added 'misses' to pvp
+* added item damage like gold swords etc (to pvp too)
+* fixed a nullpointerexception with playerdeath
+* changed death to move you to /spawn
+"/health", "- Shows your current health."
+"/pvpenable", "- Enable PVP"
+"/pvpdisable", "- Disable PVP"
+"/heal", "- Sets you to full health"
+* set inventory items to be deleted on death (thanks tom!)
+* all items now drop on death (including equiped)
+* added /enablecombatlog and /disablecombatlog per player
+* worked around an exception issue with the remindtask loop
+* added some colours to the combat log
+* fixed a typo within the skeleton mob attack check
+* configfile MixxitPlugin.properties now saves PVP setting 0 (disabled) by default
+* added a bunch of tom's changes for loading settings
+* (Sturmeh) Added new data class (unused atm) - thanks!
+* (Sturmeh) Fixes for file lock bug - thanks!
+* (s3ntient) Added healing from eating food - thanks!
+* made some changes to the scheduler
+* stopped mobs from hitting players when they have < 1 hp
