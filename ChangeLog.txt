@@ -1,3 +1,9 @@
+Version 1.15
+* basic guild support via /guild and /setguild (See command descriptions on the wiki page)
+* added support for saving guild information in the playerData file.
+* basic faction support (aka pvp teams - see wiki for command descriptions)
+* basic character level support
+
 Version 1.14
 * (Tom316) - Updated to 1.14
 * reduced combat spam additions via the /compressedcombatlog command
