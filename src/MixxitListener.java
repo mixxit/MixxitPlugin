@@ -140,6 +140,7 @@ public class MixxitListener extends PluginListener
           int curmelee = 0;
           int curlevel = 0;
           int curfaction = 0;
+          int curguild = 0;
           
           try          
           {
@@ -190,16 +191,26 @@ public class MixxitListener extends PluginListener
               System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
 
           }
+          
+          try          
+          {
+        	  curguild = Integer.parseInt(params[5]);
+          }
+          catch (ArrayIndexOutOfBoundsException e)
+          {
+              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
+
+          }
 
           MixxitListener.p1 curplayer = new MixxitListener.p1(tokens[0], curhp);
           curplayer.exp = curexp;
           curplayer.melee = curmelee;
           curplayer.level = curlevel;
           curplayer.faction = curfaction;
-          
+          curplayer.guild = curguild;
 
           this.playerList.add(curplayer);
-          System.out.println(getDateTime() + " [DEBUG] new player: " + curplayer.name + " added with: " + curplayer.hp + ":" + curplayer.exp + ":" + curplayer.melee);
+          System.out.println(getDateTime() + " [DEBUG] new player: " + curplayer.name + " added with: " + curplayer.hp + ":" + curplayer.exp + ":" + curplayer.melee + ":" + curplayer.level + ":" + curplayer.faction + ":" + curplayer.guild);
         }
 
       }
@@ -223,7 +234,7 @@ public class MixxitListener extends PluginListener
   {
     PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
     for (int i = 0; i < this.playerList.size(); i++) {
-      String playerData = ((MixxitListener.p1)this.playerList.get(i)).hp + ":" + ((MixxitListener.p1)this.playerList.get(i)).exp + ":" + ((MixxitListener.p1)this.playerList.get(i)).melee + ":" + ((MixxitListener.p1)this.playerList.get(i)).level + ":" + ((MixxitListener.p1)this.playerList.get(i)).faction;
+      String playerData = ((MixxitListener.p1)this.playerList.get(i)).hp + ":" + ((MixxitListener.p1)this.playerList.get(i)).exp + ":" + ((MixxitListener.p1)this.playerList.get(i)).melee + ":" + ((MixxitListener.p1)this.playerList.get(i)).level + ":" + ((MixxitListener.p1)this.playerList.get(i)).faction+ ":" + ((MixxitListener.p1)this.playerList.get(i)).guild;
       configPlayers.setString(((MixxitListener.p1)this.playerList.get(i)).name, playerData);
     }
   }
@@ -333,6 +344,7 @@ public class MixxitListener extends PluginListener
 	      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
 	      {
 	        ((MixxitListener.p1)this.playerList.get(i)).level = level;
+	        player.sendMessage("Congratulations, you reached Level " + level + "!");
 	      }
 	    }
   }
@@ -409,6 +421,27 @@ public class MixxitListener extends PluginListener
     }
     return -1;
   }
+  
+  public void setGuild(Player player, int value)
+  {
+    for (int i = 0; i < this.playerList.size(); i++) {
+      if (!((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+        continue;
+      ((MixxitListener.p1)this.playerList.get(i)).guild = value;
+      player.sendMessage("Your guild (" + value + ") has been set.");
+    }
+  }
+
+  public int getGuild(Player player)
+  {
+    for (int i = 0; i < this.playerList.size(); i++) {
+      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+      {
+        return ((MixxitListener.p1)this.playerList.get(i)).guild;
+      }
+    }
+    return -1;
+  }
 
   public void enableCombatLog(Player player)
   {
@@ -441,6 +474,18 @@ public class MixxitListener extends PluginListener
       enableCombatLog(player);
       return true;
     }
+    if ((split[0].equalsIgnoreCase("/setguild")) && (player.canUseCommand("/setguild")))
+    {
+      setGuild(player, Integer.parseInt(split[1]));
+      return true;
+    }
+    
+    if ((split[0].equalsIgnoreCase("/guild")) && (player.canUseCommand("/guild")))
+    {
+      player.sendMessage("You are in guild: " + getGuild(player));
+      return true;
+    }
+    
     if ((split[0].equalsIgnoreCase("/disablecombatlog")) && (player.canUseCommand("/disablecombatlog")))
     {
       disableCombatLog(player);
@@ -538,6 +583,14 @@ public class MixxitListener extends PluginListener
         continue;
       ((MixxitListener.p1)this.playerList.get(i)).melee += 1;
       player.sendMessage("§9You get better at melee! (" + ((MixxitListener.p1)this.playerList.get(i)).melee + ")!");
+      
+      for (int ilevel = 1; ilevel < 41; ilevel++)
+      {
+    	  if (((MixxitListener.p1)this.playerList.get(i)).exp == (i * 10) * i)
+    	  {
+    		  setPlayerLevel(player, ilevel);
+    	  }
+      }
     }
   }
 
@@ -947,6 +1000,7 @@ public class MixxitListener extends PluginListener
     public int level = 0;
     public int faction = 0;
     public int combatlog = 1;
+    public int guild = 0;
 
     public p1(String name, int hp)
     {
