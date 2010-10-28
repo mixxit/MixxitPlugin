@@ -1,48 +1,48 @@
 import java.util.HashMap;
-/**
- * Mortal.java - Plug-in class for hey0's minecraft mod.
- * @author Shaun (Sturmeh)
- */
-public class Mortal {
-	private HashMap<VarInt, Integer> intField;
-	private static PropertiesFile defaultdata = new PropertiesFile("mixxitDefaults.txt");
-	public String name;
-	
-	public enum VarInt {
-		HP,
-		EXP,
-		MELEE
-	}
 
-	public Mortal(Player player, String key) {
-		intField = new HashMap<VarInt, Integer>();
-		name = player.getName();
-		String[] details = key.split("|");
-		int i = 0;
-		for (VarInt val : VarInt.values()) {
-			if (i < details.length)
-				intField.put(val, Integer.decode(details[i]));
-			else
-				intField.put(val, getDefault(val));
-		}
-	}
-	
-	public int get(VarInt value) {
-		return intField.get(value);
-	}
+public class Mortal
+{
+  private HashMap<Mortal.VarInt, Integer> intField;
+  private static PropertiesFile defaultdata = new PropertiesFile("mixxitDefaults.txt");
+  public String name;
 
-	public String toString() {
-		String key = "";
-		for (VarInt val : VarInt.values()) {
-			key += intField.get(val);
-			
-			if (val.ordinal() < VarInt.values().length - 1)
-				key += "|";
-		}
-		return key;
-	}
-	
-	private static int getDefault(VarInt value) {
-		return defaultdata.getInt(value.toString(), 0);
-	}
+  public Mortal(Player player, String key)
+  {
+    this.intField = new HashMap();
+    this.name = player.getName();
+    String[] details = key.split("|");
+    int i = 0;
+    for (Mortal.VarInt val : Mortal.VarInt.values())
+      if (i < details.length)
+        this.intField.put(val, Integer.decode(details[i]));
+      else
+        this.intField.put(val, Integer.valueOf(getDefault(val)));
+  }
+
+  public int get(Mortal.VarInt value)
+  {
+    return ((Integer)this.intField.get(value)).intValue();
+  }
+
+  public String toString() {
+    String key = "";
+    for (Mortal.VarInt val : Mortal.VarInt.values()) {
+      key = key + this.intField.get(val);
+
+      if (val.ordinal() < Mortal.VarInt.values().length - 1)
+        key = key + "|";
+    }
+    return key;
+  }
+
+  private static int getDefault(Mortal.VarInt value) {
+    return defaultdata.getInt(value.toString(), 0);
+  }
+
+  public static enum VarInt
+  {
+    HP, 
+    EXP, 
+    MELEE;
+  }
 }
