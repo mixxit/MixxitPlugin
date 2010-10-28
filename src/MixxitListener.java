@@ -135,15 +135,61 @@ public class MixxitListener extends PluginListener
 
           String[] params = tokens[1].split(":");
 
-          int curhp = Integer.parseInt(params[0]);
-
-          int curexp = Integer.parseInt(params[1]);
-
-          int curmelee = Integer.parseInt(params[2]);
+          int curhp = 0;
+          int curexp = 0;
+          int curmelee = 0;
+          int curlevel = 0;
+          int curfaction = 0;
           
-          int curlevel = Integer.parseInt(params[3]);
+          try          
+          {
+        	  curhp = Integer.parseInt(params[0]);
+          }
+          catch (ArrayIndexOutOfBoundsException e)
+          {
+              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
+
+          }
+
+          try          
+          {
+        	  curexp = Integer.parseInt(params[1]);
+          }
+          catch (ArrayIndexOutOfBoundsException e)
+          {
+              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
+
+          }
+
+          try          
+          {
+        	  curmelee = Integer.parseInt(params[2]);
+          }
+          catch (ArrayIndexOutOfBoundsException e)
+          {
+              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
+
+          }
+
+          try          
+          {
+        	  curlevel = Integer.parseInt(params[3]);
+          }
+          catch (ArrayIndexOutOfBoundsException e)
+          {
+              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
+
+          }
           
-          int curfaction = Integer.parseInt(params[4]);
+          try          
+          {
+        	  curfaction = Integer.parseInt(params[4]);
+          }
+          catch (ArrayIndexOutOfBoundsException e)
+          {
+              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
+
+          }
 
           MixxitListener.p1 curplayer = new MixxitListener.p1(tokens[0], curhp);
           curplayer.exp = curexp;
