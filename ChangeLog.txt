@@ -1,4 +1,5 @@
 Version 1.15
+* added the /whoall and /whois command
 * added the owner to the guild made with /createguild 
 * packguilds patch
 * added /createguild /whoisguild and /setguildowner
