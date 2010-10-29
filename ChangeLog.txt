@@ -1,3 +1,6 @@
+Version 1.16
+* added /setguildspawn (guild owner only) and /guildspawn (warps you to the guildspawn point)
+
 Version 1.15
 * added boomer toggle /enableboomers /disableboomers
 * added /stats command and player statistics, STR, STA, AGI, DEX, INT, WIS, CHA, LCK they go up when you level
