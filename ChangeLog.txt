@@ -1,4 +1,11 @@
 Version 1.16
+* configure setfaction to assign groups
+
+Please add to your groups.txt:
+
+good:9::default:0
+evil:c::default:0
+
 * added /setguildspawn (guild owner only) and /guildspawn (warps you to the guildspawn point)
 * hp is now based on players stamina (int bonus = (getPlayerByName(player).stat_sta + 5) * 5)
 
