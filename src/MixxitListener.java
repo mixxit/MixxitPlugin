@@ -103,6 +103,7 @@ public class MixxitListener extends PluginListener
 			    			newguild.name = guilddata[1];
 			    			newguild.owner = guilddata[2];
 			    			System.out.println(getDateTime() + "[DEBUG] Guild Loaded: " + newguild.guildid + ":" + newguild.name);
+			    			this.guildList.add(newguild);
 		    			}
 		    		}
 	    	    }
