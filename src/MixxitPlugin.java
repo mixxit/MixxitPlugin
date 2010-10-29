@@ -35,7 +35,9 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().addCommand("/guild", "- Shows your guild");
     etc.getInstance().addCommand("/setguildowner", "- Sets a guild owner <playername> <guildid>");
     etc.getInstance().addCommand("/createguild", "- Creates a guild <name> <ownerplayername>");
-    
+    etc.getInstance().addCommand("/whois", "- Shows information about a player");
+    etc.getInstance().addCommand("/whoisguild", "- Views <playernames> guild");
+
     
     
     
@@ -57,6 +59,9 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().removeCommand("/level");
     etc.getInstance().removeCommand("/guilds");
     etc.getInstance().removeCommand("/guild");
+    etc.getInstance().removeCommand("/whois");
+    etc.getInstance().removeCommand("/whoisguild");
+
     
 
     System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " disabled");

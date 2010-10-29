@@ -550,6 +550,40 @@ public class MixxitListener extends PluginListener
 	  return player;
   }
   
+  public int getPlayerExperience(Player player)
+  {
+	  
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitListener.p1)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        return ((MixxitListener.p1)this.playerList.get(i)).exp;
+	      }
+	  }
+	    
+	  return 0;
+	
+	  
+  }
+  
+  public String getFactionName(int faction)
+  {
+	  if (faction == 0)
+	  {
+		  return "Civilian";
+	  }
+	  if (faction == 1)
+	  {
+		  return "Villain";		  
+	  }
+	  if (faction == 2)
+	  {
+		  return "Hero";
+	  }
+	  
+	  return "";
+  }
+  
+  
   public void enableCombatLog(Player player)
   {
     player.sendMessage("Combat Log Enabled - to disable /disablecombatlog");
@@ -626,6 +660,25 @@ public class MixxitListener extends PluginListener
     if ((split[0].equalsIgnoreCase("/whoisguild")) && (player.canUseCommand("/whoisguild")))
     {
       player.sendMessage(getGuildName(getPlayerGuildID(split[1])) + " Player Guild ID: "+ getPlayerGuildID(split[1]));
+      return true;
+    }
+    
+    if ((split[0].equalsIgnoreCase("/whois")) && (player.canUseCommand("/whois")))
+    {
+    	try
+    	{
+    		if (split[1].equals("") == true)
+        	{
+    			player.sendMessage(getPlayerLevel(getPlayerByName(split[1])) + "Player: " + split[1] + " Guild: " + getPlayerGuildName(getPlayerByName(split[1])) + " Faction: " + getFactionName(getPlayerFaction(getPlayerByName(split[1]))) + "Experience: " + getPlayerExperience(getPlayerByName(split[1])));
+        	} else {
+        		player.sendMessage("Syntax /whois <playername>");
+        	}
+    	}
+    	catch (ArrayIndexOutOfBoundsException e)
+    	{
+    	      player.sendMessage("Syntax /whois <playername>");
+    	}
+      player.sendMessage("Syntax /whois <playername>");
       return true;
     }
     
