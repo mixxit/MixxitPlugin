@@ -799,6 +799,7 @@ public class MixxitListener extends PluginListener
         continue;
       exists = 1;
       player.sendMessage("Welcome back! HP: " + getPlayerHP(player));
+      player.sendMessage("PVP MODE: "+ this.pvp + " PVP Teams: " + this.pvpteams);
     }
 
     if (exists == 0)
