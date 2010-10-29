@@ -1,7 +1,3 @@
-import java.io.PrintStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Logger;
 
 public class MixxitPlugin extends Plugin
@@ -11,14 +7,14 @@ public class MixxitPlugin extends Plugin
 
   static final Logger log = Logger.getLogger("Minecraft");
   static MixxitListener listener;
-
+/*
   private String getDateTime()
   {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Date date = new Date();
     return dateFormat.format(date);
   }
-
+*/
   public void enable()
   {
     etc.getInstance().addCommand("/health", "- Shows your current health.");
@@ -49,7 +45,8 @@ public class MixxitPlugin extends Plugin
     
     
     listener = new MixxitListener();
-    System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " enabled");
+    log.info(this.name + " " + this.version + " enabled");
+    //System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " enabled");
   }
 
   public void disable()
@@ -76,8 +73,8 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().removeCommand("/guildspawn");
     etc.getInstance().removeCommand("/setguildspawn");
     
-
-    System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " disabled");
+    log.info(this.name + " " + this.version + " disabled");
+    //System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " disabled");
   }
 
   public void initialize()
