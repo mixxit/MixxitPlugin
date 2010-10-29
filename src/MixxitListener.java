@@ -621,20 +621,6 @@ public class MixxitListener extends PluginListener
     		player.sendMessage("Syntax: <playername> <guildid>");
     	}
       return true;
-      
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-      
-      
-      player.sendMessage("Guild: " + split[1] + " created.");
-      return true;
     }
     
     if ((split[0].equalsIgnoreCase("/whoisguild")) && (player.canUseCommand("/whoisguild")))
