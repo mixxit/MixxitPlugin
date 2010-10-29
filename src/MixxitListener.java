@@ -179,7 +179,6 @@ public class MixxitListener extends PluginListener
           }
           catch (ArrayIndexOutOfBoundsException e)
           {
-              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
 
           }
 
@@ -189,7 +188,6 @@ public class MixxitListener extends PluginListener
           }
           catch (ArrayIndexOutOfBoundsException e)
           {
-              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
 
           }
 
@@ -199,7 +197,6 @@ public class MixxitListener extends PluginListener
           }
           catch (ArrayIndexOutOfBoundsException e)
           {
-              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
 
           }
 
@@ -209,7 +206,6 @@ public class MixxitListener extends PluginListener
           }
           catch (ArrayIndexOutOfBoundsException e)
           {
-              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
 
           }
           
@@ -219,7 +215,6 @@ public class MixxitListener extends PluginListener
           }
           catch (ArrayIndexOutOfBoundsException e)
           {
-              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
 
           }
           
@@ -229,7 +224,6 @@ public class MixxitListener extends PluginListener
           }
           catch (ArrayIndexOutOfBoundsException e)
           {
-              System.out.println(getDateTime() + " [DEBUG] ArrayIndexOutOfBoundsException - " + e.getMessage());
 
           }
 
