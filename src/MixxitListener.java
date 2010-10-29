@@ -949,11 +949,12 @@ public class MixxitListener extends PluginListener
       return true;
     }
     
-    if ((split[0].equalsIgnoreCase("/setguildspawn")) && (player.canUseCommand("/whoall")))
+    if ((split[0].equalsIgnoreCase("/setguildspawn")) && (player.canUseCommand("/setguildspawn")))
     {
+    	player.sendMessage(getGuildOwner(getGuildName(getPlayerGuildID(player.getName()))));
     	if (getGuildOwner(getGuildName(getPlayerGuildID(player.getName()))).equals(player.getName()) == true)
     	{
-    		setGuildHome(getPlayerGuildID(player.getName()),player.getX() + "^"+player.getY() + "^"+ player.getZ());
+    		setGuildHome(getPlayerGuildID(player.getName()),player.getX() + "#"+player.getY() + "#"+ player.getZ());
     		player.sendMessage(getPlayerGuildID(player.getName())+ " Guild home set at your location " + player.getX() + ":"+player.getY() + ":"+ player.getZ());
     	}
     	
@@ -962,14 +963,14 @@ public class MixxitListener extends PluginListener
       return true;
     }
     
-    if ((split[0].equalsIgnoreCase("/guildspawn")) && (player.canUseCommand("/whoall")))
+    if ((split[0].equalsIgnoreCase("/guildspawn")) && (player.canUseCommand("/guildspawn")))
     {
     	for (int i = 0; i < this.guildList.size(); i++) {
   	      String guildData = ((MixxitGuild)this.guildList.get(i)).home;
       	player.sendMessage(getPlayerGuildName(player) + " Home: " + guildData);
       	if (!getGuildHome(getPlayerGuildID(player.getName())).equals(""))
     	{
-      		String[] guildspawn = getGuildHome(getPlayerGuildID(player.getName())).split("^");
+      		String[] guildspawn = getGuildHome(getPlayerGuildID(player.getName())).split("[#]");
       		Location guildloc = new Location();
       		guildloc.x = Double.parseDouble(guildspawn[0]);
       		guildloc.y = Double.parseDouble(guildspawn[1]);
