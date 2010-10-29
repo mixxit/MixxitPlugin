@@ -669,9 +669,9 @@ public class MixxitListener extends PluginListener
     	{
     		if (split[1].equals("") == true)
         	{
-    			player.sendMessage(getPlayerLevel(getPlayerByName(split[1])) + "Player: " + split[1] + " Guild: " + getPlayerGuildName(getPlayerByName(split[1])) + " Faction: " + getFactionName(getPlayerFaction(getPlayerByName(split[1]))) + "Experience: " + getPlayerExperience(getPlayerByName(split[1])));
-        	} else {
         		player.sendMessage("Syntax /whois <playername>");
+        	} else {
+    			player.sendMessage(getPlayerLevel(getPlayerByName(split[1])) + "Player: " + split[1] + " Guild: " + getPlayerGuildName(getPlayerByName(split[1])) + " Faction: " + getFactionName(getPlayerFaction(getPlayerByName(split[1]))) + "Experience: " + getPlayerExperience(getPlayerByName(split[1])));
         	}
     	}
     	catch (ArrayIndexOutOfBoundsException e)
