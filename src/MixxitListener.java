@@ -263,7 +263,7 @@ public class MixxitListener extends PluginListener
 	    for (int i = 0; i < this.guildList.size(); i++) {
 	      String guildData = ((MixxitGuild)this.guildList.get(i)).guildid + ":" + ((MixxitGuild)this.guildList.get(i)).name + ":" + ((MixxitGuild)this.guildList.get(i)).owner;
 	      System.out.println("Packing:" + guildData);
-	      configGuilds.setString(((MixxitGuild)this.guildList.get(i)).guildid, guildData);
+	      configGuilds.setString(Integer.toString(((MixxitGuild)this.guildList.get(i)).guildid), guildData);
 	    }
   }
 
