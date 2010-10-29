@@ -38,6 +38,8 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().addCommand("/whois", "- Shows information about a player");
     etc.getInstance().addCommand("/whoisguild", "- Views <playernames> guild");
     etc.getInstance().addCommand("/whoall", "- Lists all players with guildname and faction");
+    etc.getInstance().addCommand("/guildlist", "- Lists all players within a <guild>");
+    
     
     
     
@@ -63,6 +65,7 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().removeCommand("/whois");
     etc.getInstance().removeCommand("/whoisguild");
     etc.getInstance().removeCommand("/whoall");
+    etc.getInstance().removeCommand("/guildlist");
     
 
     

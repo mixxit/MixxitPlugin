@@ -534,6 +534,18 @@ public class MixxitListener extends PluginListener
 	  return getGuildName(getGuild(player));
   }
   
+  public int getGuildID(String name)
+  {
+	  for (int i = 0; i < this.guildList.size(); i++) {
+		  if (((MixxitGuild)this.guildList.get(i)).name.equals(name))
+		  {
+			  return ((MixxitGuild)this.guildList.get(i)).guildid;
+		  }
+	  }
+	  
+	  return 0;
+  }
+  
   public String getGuildName(int id)
   {
 	  for (int i = 0; i < this.guildList.size(); i++) {
@@ -583,7 +595,7 @@ public class MixxitListener extends PluginListener
 	  }
   }
   
- 
+
   
   public String getFactionName(int faction)
   {
@@ -784,6 +796,31 @@ public class MixxitListener extends PluginListener
     if ((split[0].equalsIgnoreCase("/whoall")) && (player.canUseCommand("/whoall")))
     {
     	getAllPlayers(player);
+      return true;
+    }
+    
+    if ((split[0].equalsIgnoreCase("/guildlist")) && (player.canUseCommand("/guildlist")))
+    {
+    	try
+    	{
+    		if (split[1].equals("") == true)
+        	{
+        		player.sendMessage("Syntax /guildlist <guildname>");
+        	} else {
+        		for (Player p : etc.getServer().getPlayerList())
+        		  {
+        			if (getGuildName(getGuild(p)).equals(split[1]))
+        			{
+             			  player.sendMessage(p.getName() + " - " + getPlayerGuildName(p) + " " + getFactionName(getPlayerFaction(p)));
+             			        				
+        			}
+        		  }
+        	}
+    	}
+    	catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		player.sendMessage("Syntax /guildlist <guildname>");
+    	}
       return true;
     }
        
