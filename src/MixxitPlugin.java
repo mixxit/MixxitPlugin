@@ -42,7 +42,8 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().addCommand("/stats", "- Shows your stats");
     etc.getInstance().addCommand("/enableboomers", "- Enables boomers");
     etc.getInstance().addCommand("/disableboomers", "- Disables boomers");
-    
+    etc.getInstance().addCommand("/setguildspawn", "- Sets guild spawn point to current location (owner only)");
+    etc.getInstance().addCommand("/guildspawn", "- Warps you to the guild spawn point");
     
     
     
@@ -72,7 +73,8 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().removeCommand("/stats");
     etc.getInstance().removeCommand("/enableboomers");
     etc.getInstance().removeCommand("/disableboomers");
-
+    etc.getInstance().removeCommand("/guildspawn");
+    etc.getInstance().removeCommand("/setguildspawn");
     
 
     System.out.println(getDateTime() + " [INFO] " + this.name + " " + this.version + " disabled");
