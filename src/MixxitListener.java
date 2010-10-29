@@ -889,6 +889,20 @@ public class MixxitListener extends PluginListener
 
       return true;
     }
+    
+    if ((split[0].equalsIgnoreCase("/enableboomers")) && (player.canUseCommand("/enableboomers")))
+    {
+      player.sendMessage("Boomers enabled.");
+      this.boomers = true;
+      return true;
+    }
+    if ((split[0].equalsIgnoreCase("/disableboomers")) && (player.canUseCommand("/disableboomers")))
+    {
+      player.sendMessage("Boomers disabled.");
+      this.boomers = false;
+      return true;
+    }
+
  
     if ((split[0].equalsIgnoreCase("/setfaction")) && (player.canUseCommand("/setfaction")))
     {
