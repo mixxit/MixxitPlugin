@@ -1,4 +1,5 @@
 Version 1.15
+* added the owner to the guild made with /createguild 
 * packguilds patch
 * added /createguild /whoisguild and /setguildowner
 * basic guild support via /guild and /setguild (See command descriptions on the wiki page)

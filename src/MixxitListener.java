@@ -502,6 +502,15 @@ public class MixxitListener extends PluginListener
 	  newguild.name = name;
 	  newguild.owner = owner;
 	  this.guildList.add(newguild);
+	  
+	  for (Player p : etc.getServer().getPlayerList())
+	  {
+		  if (p.getName().equals(owner) == true)
+		  {
+			  setGuild(p,newguild.guildid);
+		  }
+	  }
+	  
   }
 
   public int getGuild(Player player)
@@ -532,6 +541,20 @@ public class MixxitListener extends PluginListener
 	  return "Unguilded";
   }
 
+  public Player getPlayerByName(String name)
+  {
+	  Player player = new Player();
+	  for (Player p : etc.getServer().getPlayerList())
+	  {
+		  if (p.getName().equals(name) == true)
+		  {
+			  player = p;
+		  }
+	  }
+	  
+	  return player;
+  }
+  
   public void enableCombatLog(Player player)
   {
     player.sendMessage("Combat Log Enabled - to disable /disablecombatlog");
@@ -565,14 +588,20 @@ public class MixxitListener extends PluginListener
     }
     if ((split[0].equalsIgnoreCase("/setguild")) && (player.canUseCommand("/setguild")))
     {
-      setGuild(player, Integer.parseInt(split[1]));
-      player.sendMessage("Player set to guild.");
+    	if (split[1].equals("") == true)
+    	{
+    		player.sendMessage("Syntax: <playername> <guildid>");
+    	} else {
+    		setGuild(getPlayerByName(split[1]), Integer.parseInt(split[2]));
+    		player.sendMessage("Player set to guild.");
+    	}
       return true;
     }
     
     if ((split[0].equalsIgnoreCase("/createguild")) && (player.canUseCommand("/createguild")))
     {
       createGuild(split[1],split[2]);
+      
       player.sendMessage("Guild: " + split[1] + " created.");
       return true;
     }
