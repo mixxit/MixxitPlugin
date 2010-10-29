@@ -1127,7 +1127,8 @@ public class MixxitListener extends PluginListener
       }
 
       inv = player.getInventory();
-      inv.removeItem(new Item(iteminhand, 1));
+      // can't do this, it needs the slot id from getiteminhand
+      //inv.removeItem(player.getItemInHand());
       inv.updateInventory();
     }
 
