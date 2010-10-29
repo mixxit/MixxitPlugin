@@ -16,6 +16,7 @@ public class MixxitListener extends PluginListener
 {
   public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
   public PropertiesFile guilds = new PropertiesFile("MixxitPlugin.guilds");
+  PropertiesFile configPlayers;
   static final Logger log = Logger.getLogger("Minecraft");
 
   boolean pvp = false;
@@ -372,8 +373,8 @@ public class MixxitListener extends PluginListener
 
   public void packPlayers()
   {
-	  System.out.println("Packing players...");
-    PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
+	System.out.println("Packing players...");
+    configPlayers = new PropertiesFile("MixxitPlugin.txt");
     for (int i = 0; i < this.playerList.size(); i++) {
       String playerData = ((MixxitPlayer)this.playerList.get(i)).hp + ":" + ((MixxitPlayer)this.playerList.get(i)).exp + ":" + ((MixxitPlayer)this.playerList.get(i)).melee + ":" + ((MixxitPlayer)this.playerList.get(i)).level + ":" + ((MixxitPlayer)this.playerList.get(i)).faction+ ":" + ((MixxitPlayer)this.playerList.get(i)).guild+ ":" + ((MixxitPlayer)this.playerList.get(i)).stat_str + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_sta + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_agi + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_dex + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_int + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_wis + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_cha + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_lck;
       configPlayers.setString(((MixxitPlayer)this.playerList.get(i)).name, playerData);
