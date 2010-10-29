@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class MixxitPlugin extends Plugin
 {
   private String name = "MixxitPlugin";
-  private String version = "1.15g";
+  private String version = "1.6";
 
   static final Logger log = Logger.getLogger("Minecraft");
   static MixxitListener listener;

@@ -70,7 +70,7 @@ public class MixxitListener extends PluginListener
     this.playerList = new ArrayList();
     this.guildList = new ArrayList();
     loadPlayerList();
-    loadGuilds
+    loadGuilds();
     loadProperties();
 
 
@@ -87,20 +87,23 @@ public class MixxitListener extends PluginListener
 	    	{
 	    		try
 	    	    {
-		    		String fileval = this.guilds.getString(Integer.toString(i), "0:Default Guild:0");
-		    		System.out.println(getDateTime() + "[DEBUG] Guild Loaded: " + fileval);
+		    		String fileval = this.guilds.getString(Integer.toString(i), "0:Default Guild:Nobody");
 		    		
-		    		if (fileval.equals("0:Default Guild:0") == true)
+		    		if (fileval.equals("0:Default Guild:Nobody") == true)
 		    		{
 		    			// skip
 		    		} else {
 		    			String[] guilddata = fileval.split(":");
 		    			
-		    			MixxitGuild newguild = new MixxitGuild();
-		    			newguild.guildid = Integer.parseInt(guilddata[0]);
-		    			newguild.name = guilddata[1];
-		    			newguild.owner = guilddata[2];
-		    			System.out.println(getDateTime() + "[DEBUG] Guild Loaded: " + newguild.guildid + newguild.name);
+		    			if (Integer.parseInt(guilddata[0]) > 0 && !guilddata[1].equals("") && !guilddata[1].equals("Default Guild") && !guilddata[2].equals("Nobody") && !guilddata[2].equals(""))
+		    			{
+			    			MixxitGuild newguild = new MixxitGuild();
+			    			
+			    			newguild.guildid = Integer.parseInt(guilddata[0]);
+			    			newguild.name = guilddata[1];
+			    			newguild.owner = guilddata[2];
+			    			System.out.println(getDateTime() + "[DEBUG] Guild Loaded: " + newguild.guildid + ":" + newguild.name);
+		    			}
 		    		}
 	    	    }
 	    		catch (Exception localException)
