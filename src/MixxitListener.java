@@ -1033,6 +1033,7 @@ public class MixxitListener extends PluginListener
   public void onDisconnect(Player player)
   {
 	  	SaveCombat saver = new SaveCombat(this);
+	  	saver.run();
 	  	
   }
 
