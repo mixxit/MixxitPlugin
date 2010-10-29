@@ -545,7 +545,6 @@ public class MixxitListener extends PluginListener
 			  player = p;
 		  }
 	  }
-	  player.sendMessage("getPlayerName called for you");
 	  
 	  return player;
   }
@@ -564,6 +563,16 @@ public class MixxitListener extends PluginListener
 	
 	  
   }
+  
+  public void getAllPlayers(Player player)
+  {
+	  for (Player p : etc.getServer().getPlayerList())
+	  {
+		  player.sendMessage(p.getName() + " - " + getPlayerGuildName(p) + " " + getFactionName(getPlayerFaction(p)));
+	  }
+  }
+  
+ 
   
   public String getFactionName(int faction)
   {
@@ -760,10 +769,15 @@ public class MixxitListener extends PluginListener
     	setPlayerFaction(player, Integer.parseInt(split[1]));
       return true;
     }
-    
+        
+    if ((split[0].equalsIgnoreCase("/whoall")) && (player.canUseCommand("/whoall")))
+    {
+    	getAllPlayers(player);
+      return true;
+    }
+       
     return false;
-  }
-  
+}
 
   public void onLogin(Player player)
   {

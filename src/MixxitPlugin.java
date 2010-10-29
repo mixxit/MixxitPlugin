@@ -37,7 +37,8 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().addCommand("/createguild", "- Creates a guild <name> <ownerplayername>");
     etc.getInstance().addCommand("/whois", "- Shows information about a player");
     etc.getInstance().addCommand("/whoisguild", "- Views <playernames> guild");
-
+    etc.getInstance().addCommand("/whoall", "- Lists all players with guildname and faction");
+    
     
     
     
@@ -55,12 +56,14 @@ public class MixxitPlugin extends Plugin
     etc.getInstance().removeCommand("/disablecombatlog");
     etc.getInstance().removeCommand("/compressedcombatlog");
     etc.getInstance().removeCommand("/MixxitDebug");
-    etc.getInstance().removeCommand("/setteam");
+    etc.getInstance().removeCommand("/setfaction");
     etc.getInstance().removeCommand("/level");
     etc.getInstance().removeCommand("/guilds");
     etc.getInstance().removeCommand("/guild");
     etc.getInstance().removeCommand("/whois");
     etc.getInstance().removeCommand("/whoisguild");
+    etc.getInstance().removeCommand("/whoall");
+    
 
     
 
