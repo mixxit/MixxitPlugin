@@ -15,6 +15,7 @@ import java.util.Timer;
 public class MixxitListener extends PluginListener
 {
   public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
+  public PropertiesFile guilds = new PropertiesFile("MixxitPlugin.guilds");
 
   boolean pvp = false;
   boolean pvpteams = true;
@@ -58,7 +59,7 @@ public class MixxitListener extends PluginListener
   public Timer timer;
   public Timer saveTimer;
   public ArrayList<MixxitListener.p1> playerList;
-
+  public ArrayList<MixxitGuild> guildList;
   public MixxitListener()
   {
     this.timer = new Timer();
@@ -67,11 +68,41 @@ public class MixxitListener extends PluginListener
 
     System.out.println(getDateTime() + " [INFO] Melee Combat Task Scheduled.");
     this.playerList = new ArrayList();
-
+    this.guildList = new ArrayList();
     loadPlayerList();
     loadProperties();
 
 
+  }
+  
+  public void loadGuilds()
+  {
+	  this.guilds = new PropertiesFile("MixxitPlugin.guilds");
+	    this.guilds.load();
+	    try
+	    {
+	    	
+	    	// max 1000 guilds
+	    	for (int i = 1; i < 1001; i++)
+	    	{
+	    		String fileval = this.guilds.getString(Integer.toString(i), "0:Default Guild:0");
+	    		if (fileval.equals("0:Default Guild:0") == true)
+	    		{
+	    			// skip
+	    		} else {
+	    			String[] guilddata = fileval.split(":");
+	    			
+	    			MixxitGuild newguild = new MixxitGuild();
+	    			newguild.guildid = Integer.parseInt(guilddata[0]);
+	    			newguild.name = guilddata[1];
+	    			newguild.owner = guilddata[2];
+	    		}
+	    	}
+	      
+	    }
+	    catch (Exception localException)
+	    {
+	    }
   }
 
   public void loadProperties()
@@ -228,6 +259,15 @@ public class MixxitListener extends PluginListener
 
   public void packParameters()
   {
+  }
+  
+  public void packGuilds()
+  {
+	  PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.guilds");
+	    for (int i = 0; i < this.guildList.size(); i++) {
+	      String playerData = ((MixxitGuild)this.guildList.get(i)).guildid + ":" + ((MixxitGuild)this.guildList.get(i)).name + ":" + ((MixxitGuild)this.guildList.get(i)).owner;
+	      configPlayers.setString(((MixxitListener.p1)this.playerList.get(i)).name, playerData);
+	    }
   }
 
   public void packPlayers()
@@ -422,6 +462,16 @@ public class MixxitListener extends PluginListener
     return -1;
   }
   
+  public void setGuildOwner(String playername, int guildid)
+  {
+	  for (int i = 0; i < this.guildList.size(); i++) {
+	      if (((MixxitGuild)this.guildList.get(i)).guildid == guildid)
+	      {
+	        ((MixxitGuild)this.guildList.get(i)).owner = playername;
+	      }
+	    }
+  }
+  
   public void setGuild(Player player, int value)
   {
     for (int i = 0; i < this.playerList.size(); i++) {
@@ -430,6 +480,28 @@ public class MixxitListener extends PluginListener
       ((MixxitListener.p1)this.playerList.get(i)).guild = value;
       player.sendMessage("Your guild (" + value + ") has been set.");
     }
+  }
+  
+  public int getHighestGuildID()
+  {
+	  int id = 0;
+	  for (int i = 0; i < this.guildList.size(); i++) {
+		  
+		  if (((MixxitGuild)this.guildList.get(i)).guildid > id)
+		  {
+			  id = ((MixxitGuild)this.guildList.get(i)).guildid;
+		  }
+	  }
+	  return id;	  
+  }
+  
+  public void createGuild(String name, String owner)
+  {
+	  MixxitGuild newguild = new MixxitGuild();
+	  newguild.guildid = getHighestGuildID() + 1;
+	  newguild.name = name;
+	  newguild.owner = owner;
+	  this.guildList.add(newguild);
   }
 
   public int getGuild(Player player)
@@ -441,6 +513,23 @@ public class MixxitListener extends PluginListener
       }
     }
     return -1;
+  }
+  
+  public String getPlayerGuildName(Player player)
+  {
+	  return getGuildName(getGuild(player));
+  }
+  
+  public String getGuildName(int id)
+  {
+	  for (int i = 0; i < this.guildList.size(); i++) {
+		  if (((MixxitGuild)this.guildList.get(i)).guildid == id)
+		  {
+			  return ((MixxitGuild)this.guildList.get(i)).name;
+		  }
+	  }
+	  
+	  return "Unguilded";
   }
 
   public void enableCombatLog(Player player)
@@ -477,12 +566,44 @@ public class MixxitListener extends PluginListener
     if ((split[0].equalsIgnoreCase("/setguild")) && (player.canUseCommand("/setguild")))
     {
       setGuild(player, Integer.parseInt(split[1]));
+      player.sendMessage("Player set to guild.");
+      return true;
+    }
+    
+    if ((split[0].equalsIgnoreCase("/createguild")) && (player.canUseCommand("/createguild")))
+    {
+      createGuild(split[1],split[2]);
+      player.sendMessage("Guild: " + split[1] + " created.");
+      return true;
+    }
+    
+    if ((split[0].equalsIgnoreCase("/whoisguild")) && (player.canUseCommand("/whoisguild")))
+    {
+      player.sendMessage(getGuildName(getPlayerGuildID(split[1])));
+      return true;
+    }
+    
+    
+    if ((split[0].equalsIgnoreCase("/setguildowner")) && (player.canUseCommand("/setguildowner")))
+    {
+      setGuildOwner(split[1], Integer.parseInt(split[2]));
+      return true;
+    }
+    
+    if ((split[0].equalsIgnoreCase("/guilds")) && (player.canUseCommand("/guilds")))
+    {
+      
+      for (int i = 0; i < this.guildList.size(); i++) {
+    	  int guildid = ((MixxitGuild)this.guildList.get(i)).guildid;
+    	  String guildname = ((MixxitGuild)this.guildList.get(i)).name;
+    	  player.sendMessage(guildid + " " + guildname);
+      }
       return true;
     }
     
     if ((split[0].equalsIgnoreCase("/guild")) && (player.canUseCommand("/guild")))
     {
-      player.sendMessage("You are in guild: " + getGuild(player));
+      player.sendMessage("You are in guild: " + getPlayerGuildName(player));
       return true;
     }
     
@@ -764,6 +885,8 @@ public class MixxitListener extends PluginListener
     return itembasedamage;
   }
 
+ 
+  
   public int getPlayerDamage(Player player)
   {
     int itemId = player.getItemInHand();
@@ -779,6 +902,21 @@ public class MixxitListener extends PluginListener
 
     return index;
   }
+  
+  public int getPlayerGuildID(String name)
+  {
+	  int guildid = 0;
+	  for (Player p : etc.getServer().getPlayerList())
+	  {
+		  if (p.getName().equals(name) == true)
+		  {
+			  return getGuild(p);
+		  }
+	  }
+	  return 0;
+  }
+  
+  
   
   public void onDisconnect(Player player)
   {

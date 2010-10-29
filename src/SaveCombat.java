@@ -16,5 +16,6 @@ class SaveCombat extends TimerTask
     this.parent.packParameters();
 
     this.parent.packPlayers();
+    this.parent.packGuilds();
   }
 }

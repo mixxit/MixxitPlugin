@@ -1,4 +1,5 @@
 Version 1.15
+* added /createguild /whoisguild and /setguildowner
 * basic guild support via /guild and /setguild (See command descriptions on the wiki page)
 * added support for saving guild information in the playerData file.
 * basic faction support (aka pvp teams - see wiki for command descriptions)
