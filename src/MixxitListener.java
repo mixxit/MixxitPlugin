@@ -422,9 +422,9 @@ public class MixxitListener extends PluginListener
       if (!this.playerList.get(i).name.equals(player.getName()))
         continue;
       int finalhp;
-      if (newhp.intValue() > 100)
+      if (newhp.intValue() > getMaxBaseHealth(player))
       {
-          finalhp = 100;
+          finalhp = getMaxBaseHealth(player);
       } else {
     	  finalhp = newhp.intValue();
       }
@@ -455,7 +455,7 @@ public class MixxitListener extends PluginListener
 
       if (getCombatLog(p) == 1)
       {
-        p.sendMessage("The " + m.getName() + " hit you back! For " + thisdmg + " damage! (CurrHP: " + p.getHealth() + ")");
+        p.sendMessage("The " + m.getName() + " hit you back! For " + thisdmg + " damage! (CurrHP: " + p.getHealth() + "/" + getMaxBaseHealth(p) + ")");
       }
 
       if (p.getHealth() < thisdmg)
@@ -733,6 +733,18 @@ public class MixxitListener extends PluginListener
 	  return "";
   }
   
+  public int getMaxBaseHealth(Player player)
+  {
+	  int bonus = (getPlayerByName(player).stat_sta + 5) * 5;
+	  return bonus;
+  }
+  
+  public int getMaxBaseDamage(Player player)
+  {
+	  int bonus = (getPlayerByName(player).stat_str + 5) * 5;
+	  return bonus;
+  }
+  
   public void setGuildHome(int guildid, String guildlocation)
   {
 	  for (int i = 0; i < this.guildList.size(); i++) {
@@ -776,7 +788,7 @@ public class MixxitListener extends PluginListener
   {
     if ((split[0].equalsIgnoreCase("/health")) && (player.canUseCommand("/health")))
     {
-      player.sendMessage("HP: " + getPlayerHP(player));
+      player.sendMessage("HP: " + getPlayerHP(player) + "/" + getMaxBaseHealth(player));
       return true;
     }
 
@@ -902,14 +914,14 @@ public class MixxitListener extends PluginListener
 
     if ((split[0].equalsIgnoreCase("/heal")) && (player.canUseCommand("/heal")))
     {
-      setPlayerHP(player, Integer.valueOf(100));
-      player.sendMessage("You have been fully healed. HP:" + getPlayerHP(player));
+      setPlayerHP(player, Integer.valueOf(getMaxBaseHealth(player)));
+      player.sendMessage("You have been fully healed. HP:" + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       return true;
     }
 
     if ((split[0].equalsIgnoreCase("/MixxitDebug")) && (player.canUseCommand("/MixxitDebug")))
     {
-      player.sendMessage("You have been fully healed. HP: " + getPlayerHP(player));
+      player.sendMessage("You have been fully healed. HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
 
       player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: pvp = " + this.pvp);
       player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: drop inventory = " + this.dropinventory);
@@ -953,11 +965,12 @@ public class MixxitListener extends PluginListener
       return true;
     }
     
-    if ((split[0].equalsIgnoreCase("/setguildspawn")) && (player.canUseCommand("/whoall")))
+    if ((split[0].equalsIgnoreCase("/setguildspawn")) && (player.canUseCommand("/setguildspawn")))
     {
+    	player.sendMessage(getGuildOwner(getGuildName(getPlayerGuildID(player.getName()))));
     	if (getGuildOwner(getGuildName(getPlayerGuildID(player.getName()))).equals(player.getName()) == true)
     	{
-    		setGuildHome(getPlayerGuildID(player.getName()),player.getX() + "^"+player.getY() + "^"+ player.getZ());
+    		setGuildHome(getPlayerGuildID(player.getName()),player.getX() + "#"+player.getY() + "#"+ player.getZ());
     		player.sendMessage(getPlayerGuildID(player.getName())+ " Guild home set at your location " + player.getX() + ":"+player.getY() + ":"+ player.getZ());
     	}
     	
@@ -966,14 +979,14 @@ public class MixxitListener extends PluginListener
       return true;
     }
     
-    if ((split[0].equalsIgnoreCase("/guildspawn")) && (player.canUseCommand("/whoall")))
+    if ((split[0].equalsIgnoreCase("/guildspawn")) && (player.canUseCommand("/guildspawn")))
     {
     	for (int i = 0; i < this.guildList.size(); i++) {
   	      String guildData = ((MixxitGuild)this.guildList.get(i)).home;
       	player.sendMessage(getPlayerGuildName(player) + " Home: " + guildData);
       	if (!getGuildHome(getPlayerGuildID(player.getName())).equals(""))
     	{
-      		String[] guildspawn = getGuildHome(getPlayerGuildID(player.getName())).split("^");
+      		String[] guildspawn = getGuildHome(getPlayerGuildID(player.getName())).split("[#]");
       		Location guildloc = new Location();
       		guildloc.x = Double.parseDouble(guildspawn[0]);
       		guildloc.y = Double.parseDouble(guildspawn[1]);
@@ -1043,7 +1056,7 @@ public class MixxitListener extends PluginListener
       if (!((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
         continue;
       exists = 1;
-      player.sendMessage("Welcome back! HP: " + getPlayerHP(player));
+      player.sendMessage("Welcome back! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       player.sendMessage("PVP MODE: "+ this.pvp + " PVP Teams: " + this.pvpteams);
       player.sendMessage("Booms: "+ this.boomers);
       
@@ -1051,10 +1064,10 @@ public class MixxitListener extends PluginListener
 
     if (exists == 0)
     {
-      MixxitPlayer play = new MixxitPlayer(player.getName(), 100);
+      MixxitPlayer play = new MixxitPlayer(player.getName(), getMaxBaseHealth(player));
       
       this.playerList.add(play);
-      player.sendMessage("Welcome, you have been registered by the hp system! HP: " + getPlayerHP(player));
+      player.sendMessage("Welcome, you have been registered by the hp system! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
     }
   }
 
@@ -1130,7 +1143,7 @@ public class MixxitListener extends PluginListener
     }
 
     player.teleportTo(etc.getServer().getSpawnLocation());
-    setPlayerHP(player, Integer.valueOf(100));
+    setPlayerHP(player, Integer.valueOf(getMaxBaseHealth(player)));
   }
 
   public String getItemName(int itemId)
@@ -1258,6 +1271,17 @@ public class MixxitListener extends PluginListener
 
  
   
+  public MixxitPlayer getPlayerByName(Player player)
+  {
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (!((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	        continue;
+	      return ((MixxitPlayer)this.playerList.get(i));
+	      
+	    }
+	return null;
+  }
+  
   public int getPlayerDamage(Player player)
   {
     int itemId = player.getItemInHand();
@@ -1345,7 +1369,7 @@ public class MixxitListener extends PluginListener
 
       if (iteminhand == 322)
       {
-        setPlayerHP(player, Integer.valueOf(100));
+        setPlayerHP(player, Integer.valueOf(getMaxBaseHealth(player)));
         player.sendMessage("The golden apple heals you to full health.");
       }
 
@@ -1367,12 +1391,12 @@ public class MixxitListener extends PluginListener
         item = "bread";
       }
 
-      if (getPlayerHP(player) < 100)
+      if (getPlayerHP(player) < getMaxBaseHealth(player))
       {
         player.sendMessage("The " + item + " heals you to " + player.getHealth() + ".");
       } else {
         player.sendMessage("The " + item + " heals you to full health.");
-        setPlayerHP(player, Integer.valueOf(100));
+        setPlayerHP(player, Integer.valueOf(getMaxBaseHealth(player)));
       }
 
       inv = player.getInventory();
@@ -1419,7 +1443,7 @@ public class MixxitListener extends PluginListener
         }
         if (getCombatLog(player) != 1)
           continue;
-        player.sendMessage("§7You try to strike a " + p.getName() + " HP: (" + getPlayerHP(p) + ") but miss! Your HP: " + getPlayerHP(player));
+        player.sendMessage("§7You try to strike a " + p.getName() + " HP: (" + getPlayerHP(p) + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       }
       else
       {
@@ -1428,7 +1452,7 @@ public class MixxitListener extends PluginListener
 
         if (getCombatLog(player) == 1)
         {
-          player.sendMessage("You strike " + p.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(player) + " Their HP: " + getPlayerHP(p));
+          player.sendMessage("You strike " + p.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(player) + "/" + getMaxBaseHealth(player) + " Their HP: " + getPlayerHP(p));
         }
         else if (getCombatLog(player) == 2)
         {
@@ -1454,7 +1478,7 @@ public class MixxitListener extends PluginListener
           this.totalplydmg += thisdmg;
           if (getCombatLog(p) == 1)
           {
-            p.sendMessage("§cYou have been hit by " + player.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(p) + " Their HP: " + getPlayerHP(player));
+            p.sendMessage("§cYou have been hit by " + player.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(p) + "/" + getMaxBaseHealth(player) + " Their HP: " + getPlayerHP(player));
           }
           else {
             if (getCombatLog(p) != 2)
@@ -1492,7 +1516,7 @@ public class MixxitListener extends PluginListener
 
           if (getCombatLog(player) == 1)
           {
-            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player));
+            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
           }
           else
           {
@@ -1523,7 +1547,7 @@ public class MixxitListener extends PluginListener
 
           if (getCombatLog(player) == 1)
           {
-            player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player));
+            player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
           }
           else if (getCombatLog(player) == 2)
           {

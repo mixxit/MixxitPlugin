@@ -33,13 +33,13 @@ class RemindTask extends TimerTask
         {
           if (this.parent.getCombatLog(p) == 1)
           {
-            p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + ")");
+            p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
           }
           else if (this.parent.getCombatLog(p) == 2)
           {
             if (this.countcompress1 == 4)
             {
-              p.sendMessage("Total damage recieved " + this.totalmobdmg + ". Current Health: " + this.parent.getPlayerHP(p) + ".");
+              p.sendMessage("Total damage recieved " + this.totalmobdmg + ". Current Health: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ".");
               this.countcompress1 = 0;
               this.totalmobdmg = 0;
             } else {
@@ -57,13 +57,13 @@ class RemindTask extends TimerTask
 
         if (this.parent.getCombatLog(p) == 1)
         {
-          p.sendMessage("§cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + ")");
+          p.sendMessage("§cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
         }
         else if (this.parent.getCombatLog(p) == 2)
         {
           if (this.countcompress1 == 4)
           {
-            p.sendMessage("Total damage recieved " + this.totalmobdmg + ". Current Health: " + this.parent.getPlayerHP(p) + ".");
+            p.sendMessage("Total damage recieved " + this.totalmobdmg + ". Current Health: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ".");
             this.countcompress1 = 0;
             this.totalmobdmg = 0;
           } else {
