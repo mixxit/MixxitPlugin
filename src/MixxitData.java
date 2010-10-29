@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class MixxitData {
 	private static long lastaccess = etc.getServer().getTime();
 	private static ArrayList<Mortal> users;
-	private static PropertiesFile userdata = new PropertiesFile("mixxitUsers.txt");
+	private static PropertiesFile userdata = new PropertiesFile("MixxitPlugin.users");
 
 	public static Mortal getMortal(Player player) {
 		if (users == null) {

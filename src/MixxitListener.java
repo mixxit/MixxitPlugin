@@ -4,18 +4,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
+import java.util.logging.Logger;
 
 public class MixxitListener extends PluginListener
 {
   public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
   public PropertiesFile guilds = new PropertiesFile("MixxitPlugin.guilds");
+  static final Logger log = Logger.getLogger("Minecraft");
 
   boolean pvp = false;
   boolean pvpteams = true;
@@ -68,9 +69,10 @@ public class MixxitListener extends PluginListener
 
     this.timer.scheduleAtFixedRate(new RemindTask(this), 0L, this.Combattimer);
 
-    System.out.println(getDateTime() + " [INFO] Melee Combat Task Scheduled.");
-    this.playerList = new ArrayList();
-    this.guildList = new ArrayList();
+    //System.out.println(getDateTime() + " [INFO] Melee Combat Task Scheduled.");
+    log.info("Melee Combat Task Scheduled.");
+    this.playerList = new ArrayList<MixxitPlayer>();
+    this.guildList = new ArrayList<MixxitGuild>();
     loadPlayerList();
     loadGuilds();
     loadProperties();
@@ -387,26 +389,28 @@ public class MixxitListener extends PluginListener
 
   private double getDistance(Player a, Mob b)
   {
-    double xPart = Math.pow(a.getX() - b.getX(), 2.0D);
-    double yPart = Math.pow(a.getY() - b.getY(), 2.0D);
-    double zPart = Math.pow(a.getZ() - b.getZ(), 2.0D);
-    return Math.sqrt(xPart + yPart + zPart);
+	  return getRealDistance(a.getLocation(), new Location(b.getX(), b.getX(), b.getZ()));
   }
 
   private double getPlayerDistance(Player a, Player b)
   {
-    double xPart = Math.pow(a.getX() - b.getX(), 2.0D);
-    double yPart = Math.pow(a.getY() - b.getY(), 2.0D);
-    double zPart = Math.pow(a.getZ() - b.getZ(), 2.0D);
+    return getRealDistance(a.getLocation(), b.getLocation());
+  }
+  
+  private double getRealDistance(Location a, Location b)
+  {
+    double xPart = Math.pow(a.x - b.x, 2.0D);
+    double yPart = Math.pow(a.y - b.y, 2.0D);
+    double zPart = Math.pow(a.z - b.z, 2.0D);
     return Math.sqrt(xPart + yPart + zPart);
   }
 
   public int getPlayerHP(Player player)
   {
     for (int i = 0; i < this.playerList.size(); i++) {
-      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+      if (this.playerList.get(i).name.equals(player.getName()))
       {
-        return ((MixxitPlayer)this.playerList.get(i)).hp;
+        return this.playerList.get(i).hp;
       }
     }
     return 0;
@@ -415,7 +419,7 @@ public class MixxitListener extends PluginListener
   public void setPlayerHP(Player player, Integer newhp)
   {
     for (int i = 0; i < this.playerList.size(); i++) {
-      if (!((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+      if (!this.playerList.get(i).name.equals(player.getName()))
         continue;
       int finalhp;
       if (newhp.intValue() > 100)
@@ -431,9 +435,9 @@ public class MixxitListener extends PluginListener
   public int getPlayerMelee(Player player)
   {
     for (int i = 0; i < this.playerList.size(); i++) {
-      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+      if (this.playerList.get(i).name.equals(player.getName()))
       {
-        return ((MixxitPlayer)this.playerList.get(i)).melee;
+        return this.playerList.get(i).melee;
       }
     }
     return 0;
@@ -469,9 +473,9 @@ public class MixxitListener extends PluginListener
   public int getPlayerLevel(Player player)
   {
 	  for (int i = 0; i < this.playerList.size(); i++) {
-	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
-	        return ((MixxitPlayer)this.playerList.get(i)).level;
+	        return this.playerList.get(i).level;
 	      }
 	    }
 	    return -1;
@@ -484,13 +488,13 @@ public class MixxitListener extends PluginListener
 	      {
 	        ((MixxitPlayer)this.playerList.get(i)).level = level;
 	        player.sendMessage("Congratulations, you reached Level " + level + "!");
-	        ((MixxitPlayer)this.playerList.get(i)).stat_str++;
-	        ((MixxitPlayer)this.playerList.get(i)).stat_sta++;
-	        ((MixxitPlayer)this.playerList.get(i)).stat_agi++;
-	        ((MixxitPlayer)this.playerList.get(i)).stat_dex++;
-	        ((MixxitPlayer)this.playerList.get(i)).stat_int++;
-	        ((MixxitPlayer)this.playerList.get(i)).stat_wis++;
-	        ((MixxitPlayer)this.playerList.get(i)).stat_lck++;
+	        this.playerList.get(i).stat_str++;
+	        this.playerList.get(i).stat_sta++;
+	        this.playerList.get(i).stat_agi++;
+	        this.playerList.get(i).stat_dex++;
+	        this.playerList.get(i).stat_int++;
+	        this.playerList.get(i).stat_wis++;
+	        this.playerList.get(i).stat_lck++;
 
 	      }
 	    }
@@ -499,9 +503,9 @@ public class MixxitListener extends PluginListener
   public boolean isPlayerPVP(Player player)
   {
 	  for (int i = 0; i < this.playerList.size(); i++) {
-	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
-	        if (((MixxitPlayer)this.playerList.get(i)).faction > 0)
+	        if (this.playerList.get(i).faction > 0)
 	        {
 	        	return true;
 	        }
@@ -514,9 +518,9 @@ public class MixxitListener extends PluginListener
   public int getPlayerFaction(Player player)
   {
 	  for (int i = 0; i < this.playerList.size(); i++) {
-	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
-	        return ((MixxitPlayer)this.playerList.get(i)).faction;
+	        return this.playerList.get(i).faction;
 	      }
 	    }
 	    return -1;
@@ -525,24 +529,24 @@ public class MixxitListener extends PluginListener
   public void setPlayerFaction(Player player, int faction)
   {
 	  for (int i = 0; i < this.playerList.size(); i++) {
-	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
 	    	  	if (faction == 0)
 	    	  	{
-	    	  		((MixxitPlayer)this.playerList.get(i)).faction = faction;
+	    	  		this.playerList.get(i).faction = faction;
 		        	player.sendMessage("Your have joined the ranks of the Civilians. Phew!");
 	    	  	}
 	    	  	
 	    	  
 	    	  	if (faction == 1)
 	    	  	{
-	    	  		((MixxitPlayer)this.playerList.get(i)).faction = faction;
+	    	  		this.playerList.get(i).faction = faction;
 		        	player.sendMessage("Your have joined the ranks of the Villains!");
 	    	  	}
 
 	    	  	if (faction == 2)
 	    	  	{
-	    	  		((MixxitPlayer)this.playerList.get(i)).faction = faction;
+	    	  		this.playerList.get(i).faction = faction;
 	        		player.sendMessage("You have joined the ranks of the Heroes!");
 	    	  	}
 	      }
@@ -554,7 +558,7 @@ public class MixxitListener extends PluginListener
     for (int i = 0; i < this.playerList.size(); i++) {
       if (!((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
         continue;
-      ((MixxitPlayer)this.playerList.get(i)).combatlog = value;
+      this.playerList.get(i).combatlog = value;
     }
   }
 
@@ -563,7 +567,7 @@ public class MixxitListener extends PluginListener
     for (int i = 0; i < this.playerList.size(); i++) {
       if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
       {
-        return ((MixxitPlayer)this.playerList.get(i)).combatlog;
+        return this.playerList.get(i).combatlog;
       }
     }
     return -1;
@@ -574,7 +578,7 @@ public class MixxitListener extends PluginListener
 	  for (int i = 0; i < this.guildList.size(); i++) {
 	      if (((MixxitGuild)this.guildList.get(i)).guildid == guildid)
 	      {
-	        ((MixxitGuild)this.guildList.get(i)).owner = playername;
+	        this.guildList.get(i).owner = playername;
 	      }
 	    }
   }
@@ -594,9 +598,9 @@ public class MixxitListener extends PluginListener
 	  int id = 0;
 	  for (int i = 0; i < this.guildList.size(); i++) {
 		  
-		  if (((MixxitGuild)this.guildList.get(i)).guildid > id)
+		  if (this.guildList.get(i).guildid > id)
 		  {
-			  id = ((MixxitGuild)this.guildList.get(i)).guildid;
+			  id = this.guildList.get(i).guildid;
 		  }
 	  }
 	  return id;	  
@@ -625,7 +629,7 @@ public class MixxitListener extends PluginListener
     for (int i = 0; i < this.playerList.size(); i++) {
       if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
       {
-        return ((MixxitPlayer)this.playerList.get(i)).guild;
+        return this.playerList.get(i).guild;
       }
     }
     return -1;
@@ -639,9 +643,9 @@ public class MixxitListener extends PluginListener
   public int getGuildID(String name)
   {
 	  for (int i = 0; i < this.guildList.size(); i++) {
-		  if (((MixxitGuild)this.guildList.get(i)).name.equals(name))
+		  if (this.guildList.get(i).name.equals(name))
 		  {
-			  return ((MixxitGuild)this.guildList.get(i)).guildid;
+			  return this.guildList.get(i).guildid;
 		  }
 	  }
 	  
@@ -651,9 +655,9 @@ public class MixxitListener extends PluginListener
   public String getGuildOwner(String name)
   {
 	  for (int i = 0; i < this.guildList.size(); i++) {
-		  if (((MixxitGuild)this.guildList.get(i)).name.equals(name))
+		  if (this.guildList.get(i).name.equals(name))
 		  {
-			  return ((MixxitGuild)this.guildList.get(i)).owner;
+			  return this.guildList.get(i).owner;
 		  }
 	  }
 	  
@@ -663,9 +667,9 @@ public class MixxitListener extends PluginListener
   public String getGuildName(int id)
   {
 	  for (int i = 0; i < this.guildList.size(); i++) {
-		  if (((MixxitGuild)this.guildList.get(i)).guildid == id)
+		  if (this.guildList.get(i).guildid == id)
 		  {
-			  return ((MixxitGuild)this.guildList.get(i)).name;
+			  return this.guildList.get(i).name;
 		  }
 	  }
 	  
@@ -690,9 +694,9 @@ public class MixxitListener extends PluginListener
   {
 	  
 	  for (int i = 0; i < this.playerList.size(); i++) {
-	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
-	        return ((MixxitPlayer)this.playerList.get(i)).exp;
+	        return this.playerList.get(i).exp;
 	      }
 	  }
 	    
@@ -732,9 +736,9 @@ public class MixxitListener extends PluginListener
   public void setGuildHome(int guildid, String guildlocation)
   {
 	  for (int i = 0; i < this.guildList.size(); i++) {
-		  if (((MixxitGuild)this.guildList.get(i)).guildid == guildid)
+		  if (this.guildList.get(i).guildid == guildid)
 		  {
-			  ((MixxitGuild)this.guildList.get(i)).home = guildlocation;
+			  this.guildList.get(i).home = guildlocation;
 		  }
       }
   }
@@ -742,9 +746,9 @@ public class MixxitListener extends PluginListener
   {
 	  String location = "";
 	  for (int i = 0; i < this.guildList.size(); i++) {
-		  if (((MixxitGuild)this.guildList.get(i)).guildid == guildid)
+		  if (this.guildList.get(i).guildid == guildid)
 		  {
-			  return ((MixxitGuild)this.guildList.get(i)).home;
+			  return this.guildList.get(i).home;
 		  }
       }
 	  return location;
@@ -858,8 +862,8 @@ public class MixxitListener extends PluginListener
     {
       
       for (int i = 0; i < this.guildList.size(); i++) {
-    	  int guildid = ((MixxitGuild)this.guildList.get(i)).guildid;
-    	  String guildname = ((MixxitGuild)this.guildList.get(i)).name;
+    	  int guildid = this.guildList.get(i).guildid;
+    	  String guildname = this.guildList.get(i).name;
     	  player.sendMessage(guildid + " " + guildname);
       }
       return true;
@@ -974,7 +978,7 @@ public class MixxitListener extends PluginListener
       		guildloc.x = Double.parseDouble(guildspawn[0]);
       		guildloc.y = Double.parseDouble(guildspawn[1]);
       		guildloc.z = Double.parseDouble(guildspawn[2]);
-    		player.teleportTo(guildloc);
+      		player.teleportTo(guildloc);
     	}
 
     	}
@@ -1059,22 +1063,22 @@ public class MixxitListener extends PluginListener
     player.sendMessage("Pending experience...");
 
     for (int i = 0; i < this.playerList.size(); i++) {
-      if (!((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName())) {
+      if (!this.playerList.get(i).name.equals(player.getName())) {
         continue;
       }
       ((MixxitPlayer)this.playerList.get(i)).exp += amount;
-      player.sendMessage("§eYou gain experience (" + ((MixxitPlayer)this.playerList.get(i)).exp + ")!");
+      player.sendMessage("§eYou gain experience (" + this.playerList.get(i).exp + ")!");
       Random generator = new Random();
       int index = generator.nextInt(100);
 
       if (index != 1)
         continue;
       ((MixxitPlayer)this.playerList.get(i)).melee += 1;
-      player.sendMessage("§9You get better at melee! (" + ((MixxitPlayer)this.playerList.get(i)).melee + ")!");
+      player.sendMessage("§9You get better at melee! (" + this.playerList.get(i).melee + ")!");
       
       for (int ilevel = 1; ilevel < 41; ilevel++)
       {
-    	  if (((MixxitPlayer)this.playerList.get(i)).exp == (i * 10) * i)
+    	  if (this.playerList.get(i).exp == (i * 10) * i)
     	  {
     		  setPlayerLevel(player, ilevel);
     	  }
@@ -1272,7 +1276,6 @@ public class MixxitListener extends PluginListener
   
   public int getPlayerGuildID(String name)
   {
-	  int guildid = 0;
 	  for (Player p : etc.getServer().getPlayerList())
 	  {
 		  if (p.getName().equals(name) == true)
@@ -1289,7 +1292,6 @@ public class MixxitListener extends PluginListener
   {
 	  	SaveCombat saver = new SaveCombat(this);
 	  	saver.run();
-	  	
   }
   
   public long getPlayerLastMove(Player player)
@@ -1309,9 +1311,9 @@ public class MixxitListener extends PluginListener
   {
 	  long lastmove = 0;
 	  for (int i = 0; i < this.playerList.size(); i++) {
-	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
-	        return ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
+	        return this.playerList.get(i).lastmove = System.currentTimeMillis()/1000;
 	      }
 	  }
 	  return lastmove;
@@ -1325,13 +1327,13 @@ public class MixxitListener extends PluginListener
 		return;
 	}
 	
-	long lastmove = 0;
+	//long lastmove = 0; // This was local?
 	// records time of current armswing
 	for (int i = 0; i < this.playerList.size(); i++) {
 	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
 	      {
 	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
-	        lastmove = ((MixxitPlayer)this.playerList.get(i)).lastmove;
+	        //lastmove = ((MixxitPlayer)this.playerList.get(i)).lastmove;
 	      }
 	}
 	
@@ -1376,6 +1378,7 @@ public class MixxitListener extends PluginListener
       inv = player.getInventory();
       // can't do this, it needs the slot id from getiteminhand
       //inv.removeItem(player.getItemInHand());
+      inv.removeItem(inv.getItemFromId(iteminhand).getSlot()); // Messy but works somewhat.
       inv.updateInventory();
     }
 

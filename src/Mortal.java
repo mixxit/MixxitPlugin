@@ -12,7 +12,19 @@ public class Mortal {
 	public static enum VarInt {
 		HP, 
 		EXP, 
-		MELEE;
+		MELEE,
+		LEVEL,
+		FACTION,
+		COMBATLOG,
+		GUILD,
+		STAT_STR,
+		STAT_AGI,
+		STAT_DEX,
+		STAT_INT,
+		STAT_WIS,
+		STAT_CHA,
+		STAT_LCK,
+		LASTMOVE
 	}
 
 	public Mortal(Player player, String key) {
@@ -45,6 +57,4 @@ public class Mortal {
 	private static int getDefault(Mortal.VarInt value) {
 		return defaultdata.getInt(value.toString(), 0);
 	}
-
-
 }
