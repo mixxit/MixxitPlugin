@@ -20,7 +20,8 @@ public class MixxitListener extends PluginListener
   boolean pvp = false;
   boolean pvpteams = true;
   boolean dropinventory = true;
-
+  boolean boomers = false;
+  
   public int totaldmg = 0;
   public int totalplydmg = 0;
   public int countcompress2 = 0;
@@ -28,6 +29,7 @@ public class MixxitListener extends PluginListener
   public int countcompress4 = 0;
   public int countcompress5 = 0;
 
+  
   int Combattimer = 700;
 
   int woodensword = 6;
@@ -123,6 +125,7 @@ public class MixxitListener extends PluginListener
       this.pvpteams = this.properties.getBoolean("pvpteams", true);
       this.dropinventory = this.properties.getBoolean("drop-inventory", true);
       this.Combattimer = this.properties.getInt("combat-timer", 700);
+      this.boomers = this.properties.getBoolean("boomers", false);
       this.woodensword = this.properties.getInt("wooden-sword", 6);
       this.stonesword = this.properties.getInt("stone-sword", 7);
       this.ironsword = this.properties.getInt("iron-sword", 8);
@@ -874,6 +877,8 @@ public class MixxitListener extends PluginListener
       player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: pvp = " + this.pvp);
       player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: drop inventory = " + this.dropinventory);
       player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: combat timer = " + this.Combattimer);
+      player.sendMessage(" [DEBUG] MixxitPlugin - Properties Loader: boomers = " + this.boomers);
+      
 
       return true;
     }
@@ -954,6 +959,8 @@ public class MixxitListener extends PluginListener
       exists = 1;
       player.sendMessage("Welcome back! HP: " + getPlayerHP(player));
       player.sendMessage("PVP MODE: "+ this.pvp + " PVP Teams: " + this.pvpteams);
+      player.sendMessage("Booms: "+ this.boomers);
+      
     }
 
     if (exists == 0)
@@ -1202,9 +1209,46 @@ public class MixxitListener extends PluginListener
 	  	saver.run();
 	  	
   }
+  
+  public long getPlayerLastMove(Player player)
+  {
+	  long lastmove = 0;
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        return ((MixxitPlayer)this.playerList.get(i)).lastmove;
+	      }
+	  }
+	  return lastmove;
+  }
 
+
+  public long setPlayerLastMove(Player player)
+  {
+	  long lastmove = 0;
+	  for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        return ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
+	      }
+	  }
+	  return lastmove;
+  }
+  
   public void onArmSwing(Player player)
   {
+	if (getPlayerLastMove(player) >= System.currentTimeMillis()/1000 - this.Combattimer)
+	{
+		return;
+	}
+	
+	for (int i = 0; i < this.playerList.size(); i++) {
+	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+	      {
+	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
+	      }
+	}
+	
     int iteminhand = player.getItemInHand();
     Inventory inv;
     if ((iteminhand == 297) || (iteminhand == 260) || (iteminhand == 320) || (iteminhand == 322))
@@ -1264,6 +1308,15 @@ public class MixxitListener extends PluginListener
     		  continue;
     	  if (isPlayerPVP(player) == false)
     		  continue;
+    	  if (isPlayerPVP(player) == true && isPlayerPVP(p) == true)
+    	  {
+    		  if (getPlayerFaction(player) == getPlayerFaction(p))
+    		  {
+    			  continue;
+    		  }
+    	  } else {
+    		  continue;
+    	  }
       }
       
       double dist = getPlayerDistance(player, p);

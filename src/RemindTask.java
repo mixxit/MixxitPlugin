@@ -82,6 +82,18 @@ class RemindTask extends TimerTask
         if (m == null) {
           continue;
         }
+        if (m.getName() == "Boomer")
+        {
+          if (this.parent.boomers == false)
+          {
+        	  m.setHealth(0);
+          }
+        	
+          for (Player p : etc.getServer().getPlayerList()) {
+            DoMobCombat(m, p, 3);
+          }
+        }
+        
         if (m.getName() == "Spider")
         {
           for (Player p : etc.getServer().getPlayerList()) {
