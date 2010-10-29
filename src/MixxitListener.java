@@ -709,6 +709,7 @@ public class MixxitListener extends PluginListener
   {
 	  for (Player p : etc.getServer().getPlayerList())
 	  {
+		  
 		  player.sendMessage(p.getName() + " - " + getPlayerGuildName(p) + " " + getFactionName(getPlayerFaction(p)));
 	  }
   }
@@ -955,6 +956,15 @@ public class MixxitListener extends PluginListener
  
     if ((split[0].equalsIgnoreCase("/setfaction")) && (player.canUseCommand("/setfaction")))
     {
+    	String[] groups = { "default" };
+    	
+    	groups[0] = "default";
+    	if (split[1].equals(Integer.toString(1)))
+    	groups[0] = "evil";
+    	if (split[1].equals(Integer.toString(2)))
+    	groups[0] = "good";
+    	
+    	player.setGroups(groups);
     	setPlayerFaction(player, Integer.parseInt(split[1]));
       return true;
     }
@@ -1058,13 +1068,13 @@ public class MixxitListener extends PluginListener
       exists = 1;
       player.sendMessage("Welcome back! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       player.sendMessage("PVP MODE: "+ this.pvp + " PVP Teams: " + this.pvpteams);
-      player.sendMessage("Booms: "+ this.boomers);
+      player.sendMessage("Boomers: "+ this.boomers);
       
     }
 
     if (exists == 0)
     {
-      MixxitPlayer play = new MixxitPlayer(player.getName(), getMaxBaseHealth(player));
+      MixxitPlayer play = new MixxitPlayer(player.getName(), 25);
       
       this.playerList.add(play);
       player.sendMessage("Welcome, you have been registered by the hp system! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );

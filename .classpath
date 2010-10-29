@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/Minecraft_Mod.jar" sourcepath="C:/Documents and Settings/enduser/Desktop/Minecraft_Mod.src.zip"/>
-	<classpathentry kind="lib" path="lib/minecraft_server.jar"/>
+	<classpathentry kind="lib" path="lib/minecraft_server.jar" sourcepath="C:/Documents and Settings/enduser/Desktop/minecraft_server.src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
