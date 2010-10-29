@@ -582,12 +582,19 @@ public class MixxitListener extends PluginListener
     }
     if ((split[0].equalsIgnoreCase("/setguild")) && (player.canUseCommand("/setguild")))
     {
+    	try
+    	{
     	if (split[1].equals("") == true)
     	{
     		player.sendMessage("Syntax: <playername> <guildid>");
     	} else {
     		setGuild(getPlayerByName(split[1]), Integer.parseInt(split[2]));
     		player.sendMessage("Player set to guild.");
+    	}
+    	}
+    	catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		player.sendMessage("Syntax: <playername> <guildid>");
     	}
       return true;
     }
