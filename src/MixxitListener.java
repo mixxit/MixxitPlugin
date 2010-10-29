@@ -612,7 +612,7 @@ public class MixxitListener extends PluginListener
     		{
     			player.sendMessage("Syntax: <playername> <guildname>");
     		} else {
-    			createGuild(split[1],split[2]);
+    			createGuild(split[2],split[1]);
     		}
     	}
     	}
