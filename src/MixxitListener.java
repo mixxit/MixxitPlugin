@@ -70,6 +70,7 @@ public class MixxitListener extends PluginListener
     this.playerList = new ArrayList();
     this.guildList = new ArrayList();
     loadPlayerList();
+    loadGuilds
     loadProperties();
 
 
@@ -79,30 +80,33 @@ public class MixxitListener extends PluginListener
   {
 	  this.guilds = new PropertiesFile("MixxitPlugin.guilds");
 	    this.guilds.load();
-	    try
-	    {
+	    
 	    	
 	    	// max 1000 guilds
 	    	for (int i = 1; i < 1001; i++)
 	    	{
-	    		String fileval = this.guilds.getString(Integer.toString(i), "0:Default Guild:0");
-	    		if (fileval.equals("0:Default Guild:0") == true)
-	    		{
-	    			// skip
-	    		} else {
-	    			String[] guilddata = fileval.split(":");
-	    			
-	    			MixxitGuild newguild = new MixxitGuild();
-	    			newguild.guildid = Integer.parseInt(guilddata[0]);
-	    			newguild.name = guilddata[1];
-	    			newguild.owner = guilddata[2];
-	    		}
+	    		try
+	    	    {
+		    		String fileval = this.guilds.getString(Integer.toString(i), "0:Default Guild:0");
+		    		System.out.println(getDateTime() + "[DEBUG] Guild Loaded: " + fileval);
+		    		
+		    		if (fileval.equals("0:Default Guild:0") == true)
+		    		{
+		    			// skip
+		    		} else {
+		    			String[] guilddata = fileval.split(":");
+		    			
+		    			MixxitGuild newguild = new MixxitGuild();
+		    			newguild.guildid = Integer.parseInt(guilddata[0]);
+		    			newguild.name = guilddata[1];
+		    			newguild.owner = guilddata[2];
+		    			System.out.println(getDateTime() + "[DEBUG] Guild Loaded: " + newguild.guildid + newguild.name);
+		    		}
+	    	    }
+	    		catch (Exception localException)
+	    	    {
+	    	    }
 	    	}
-	      
-	    }
-	    catch (Exception localException)
-	    {
-	    }
   }
 
   public void loadProperties()
@@ -235,7 +239,6 @@ public class MixxitListener extends PluginListener
           curplayer.guild = curguild;
 
           this.playerList.add(curplayer);
-          System.out.println(getDateTime() + " [DEBUG] new player: " + curplayer.name + " added with: " + curplayer.hp + ":" + curplayer.exp + ":" + curplayer.melee + ":" + curplayer.level + ":" + curplayer.faction + ":" + curplayer.guild);
         }
 
       }
