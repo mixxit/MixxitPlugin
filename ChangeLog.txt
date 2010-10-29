@@ -1,5 +1,6 @@
 Version 1.16
 * added /setguildspawn (guild owner only) and /guildspawn (warps you to the guildspawn point)
+* hp is now based on players stamina (int bonus = (getPlayerByName(player).stat_sta + 5) * 5)
 
 Version 1.15
 * added boomer toggle /enableboomers /disableboomers
