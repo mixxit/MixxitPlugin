@@ -1,4 +1,5 @@
 Version 1.15
+* added /stats command and player statistics, STR, STA, AGI, DEX, INT, WIS, CHA, LCK they go up when you level
 * added the /whoall and /whois command
 * added the owner to the guild made with /createguild 
 * packguilds patch
