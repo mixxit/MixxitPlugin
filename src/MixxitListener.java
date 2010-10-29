@@ -1251,15 +1251,19 @@ public class MixxitListener extends PluginListener
   
   public void onArmSwing(Player player)
   {
-	if (getPlayerLastMove(player) >= System.currentTimeMillis()/1000 - this.Combattimer)
+	  // this prevents people from spamming attack too fast (defaults to combattimer (700))
+	if ((System.currentTimeMillis()/1000 - this.Combattimer/1000) <= getPlayerLastMove(player))
 	{
 		return;
 	}
 	
+	long lastmove = 0;
+	// records time of current armswing
 	for (int i = 0; i < this.playerList.size(); i++) {
 	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
 	      {
 	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
+	        lastmove = ((MixxitPlayer)this.playerList.get(i)).lastmove;
 	      }
 	}
 	
