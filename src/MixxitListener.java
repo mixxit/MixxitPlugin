@@ -545,6 +545,7 @@ public class MixxitListener extends PluginListener
 			  player = p;
 		  }
 	  }
+	  player.sendMessage("getPlayerName called for you");
 	  
 	  return player;
   }
@@ -601,7 +602,36 @@ public class MixxitListener extends PluginListener
     
     if ((split[0].equalsIgnoreCase("/createguild")) && (player.canUseCommand("/createguild")))
     {
-      createGuild(split[1],split[2]);
+    	try
+    	{
+    	if (split[1].equals("") == true)
+    	{
+    		player.sendMessage("Syntax: <playername> <guildname>");
+    	} else {
+    		if (split[2].equals("") == true)
+    		{
+    			player.sendMessage("Syntax: <playername> <guildname>");
+    		} else {
+    			createGuild(split[1],split[2]);
+    		}
+    	}
+    	}
+    	catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		player.sendMessage("Syntax: <playername> <guildid>");
+    	}
+      return true;
+      
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+      
       
       player.sendMessage("Guild: " + split[1] + " created.");
       return true;
@@ -609,7 +639,7 @@ public class MixxitListener extends PluginListener
     
     if ((split[0].equalsIgnoreCase("/whoisguild")) && (player.canUseCommand("/whoisguild")))
     {
-      player.sendMessage(getGuildName(getPlayerGuildID(split[1])));
+      player.sendMessage(getGuildName(getPlayerGuildID(split[1])) + " Player Guild ID: "+ getPlayerGuildID(split[1]));
       return true;
     }
     
