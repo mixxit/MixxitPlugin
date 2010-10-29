@@ -1066,6 +1066,10 @@ public class MixxitListener extends PluginListener
       if (!((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
         continue;
       exists = 1;
+      if (getPlayerHP(player) > getMaxBaseHealth(player))
+      {
+    	  setPlayerHP(player,getMaxBaseHealth(player));
+      }
       player.sendMessage("Welcome back! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       player.sendMessage("PVP MODE: "+ this.pvp + " PVP Teams: " + this.pvpteams);
       player.sendMessage("Boomers: "+ this.boomers);
@@ -1075,7 +1079,7 @@ public class MixxitListener extends PluginListener
     if (exists == 0)
     {
       MixxitPlayer play = new MixxitPlayer(player.getName(), 25);
-      
+      play.faction = 0;
       this.playerList.add(play);
       player.sendMessage("Welcome, you have been registered by the hp system! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
     }
