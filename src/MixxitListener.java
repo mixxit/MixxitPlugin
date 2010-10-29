@@ -1112,7 +1112,8 @@ public class MixxitListener extends PluginListener
       
       for (int ilevel = 1; ilevel < 41; ilevel++)
       {
-    	  if (this.playerList.get(i).exp == (i * 10) * i)
+    	  // c99koder - fix
+    	  if (this.playerList.get(i).exp == (ilevel * 10) * ilevel)
     	  {
     		  setPlayerLevel(player, ilevel);
     	  }
