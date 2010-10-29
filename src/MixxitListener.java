@@ -389,7 +389,14 @@ public class MixxitListener extends PluginListener
 
   private double getDistance(Player a, Mob b)
   {
-	  return getRealDistance(a.getLocation(), new Location(b.getX(), b.getX(), b.getZ()));
+	  
+	  double xPart = Math.pow(a.getX() - b.getX(), 2.0D);
+	  double yPart = Math.pow(a.getY() - b.getY(), 2.0D);
+	  double zPart = Math.pow(a.getZ() - b.getZ(), 2.0D);
+	  return Math.sqrt(xPart + yPart + zPart);
+	   
+	  // mixxit - doesnt work atm for some reason
+	  //return getRealDistance(a.getLocation(), new Location(b.getX(), b.getX(), b.getZ()));
   }
 
   private double getPlayerDistance(Player a, Player b)
@@ -1362,6 +1369,7 @@ public class MixxitListener extends PluginListener
 	  // this prevents people from spamming attack too fast (defaults to combattimer (700))
 	if ((System.currentTimeMillis()/1000 - this.Combattimer/1000) <= getPlayerLastMove(player))
 	{
+		//player.sendMessage("You must wait before making another attack." + (System.currentTimeMillis()/1000 - this.Combattimer/1000) + "<=" + getPlayerLastMove(player));
 		return;
 	}
 	
@@ -1371,6 +1379,8 @@ public class MixxitListener extends PluginListener
 	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
 	      {
 	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
+	        //player.sendMessage("lastmove set:" + getPlayerLastMove(player));
+			
 	        //lastmove = ((MixxitPlayer)this.playerList.get(i)).lastmove;
 	      }
 	}
@@ -1419,6 +1429,85 @@ public class MixxitListener extends PluginListener
       inv.removeItem(inv.getItemFromId(iteminhand).getSlot()); // Messy but works somewhat.
       inv.updateInventory();
     }
+    //player.sendMessage("Debug - checking mob list");
+    for (Mob m : etc.getServer().getMobList())
+    {
+    	
+      if (m != null) {
+    	  
+    	  double dist = getDistance(player, m);
+    	  
+        if (dist >= 2.0D)
+          continue;
+        
+        
+        if (PlayerHasHit(player) == 0)
+        {
+          if (m.getHealth() < 1)
+          {
+            continue;
+          }
+         // player.sendMessage("Debug - missed");
+          if (getCombatLog(player) == 1)
+          {
+            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+          }
+          else
+          {
+            if (getCombatLog(player) != 2)
+              continue;
+            if (this.countcompress3 == 6)
+            {
+              player.sendMessage("You have missed " + this.countcompress3 + " times. Current Health: " + getPlayerHP(player) + ".");
+              this.countcompress3 = 0;
+            }
+            else {
+              this.countcompress3 += 1;
+            }
+
+          }
+
+        }
+        else
+        {
+          if (m.getHealth() < 1)
+          {
+            continue;
+          }
+          //player.sendMessage("Debug - hit");
+          int thisdmg = getPlayerDamage(player);
+
+          this.totaldmg += thisdmg;
+
+          if (getCombatLog(player) == 1)
+          {
+            player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+          }
+          else if (getCombatLog(player) == 2)
+          {
+            if (this.countcompress2 == 4)
+            {
+              player.sendMessage("Total damage done " + this.totaldmg + ". Current Health: " + getPlayerHP(player) + ".");
+              this.countcompress2 = 0;
+              this.totaldmg = 0;
+            } else {
+              this.countcompress2 += 1;
+            }
+
+          }
+
+          if (m.getHealth() <= thisdmg)
+          {
+            player.sendMessage("You have slain a " + m.getName() + "!");
+            m.setHealth(0);
+            GiveExperience(player, 1);
+          } else {
+            m.setHealth(m.getHealth() - thisdmg);
+          }
+        }
+      }
+    }
+    
 
     for (Player p : etc.getServer().getPlayerList())
     {
@@ -1514,79 +1603,7 @@ public class MixxitListener extends PluginListener
 
     }
 
-    for (Mob m : etc.getServer().getMobList())
-    {
-      if (m != null) {
-        double dist = getDistance(player, m);
-
-        if (dist >= 2.0D)
-          continue;
-        if (PlayerHasHit(player) == 0)
-        {
-          if (m.getHealth() < 1)
-          {
-            continue;
-          }
-
-          if (getCombatLog(player) == 1)
-          {
-            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
-          }
-          else
-          {
-            if (getCombatLog(player) != 2)
-              continue;
-            if (this.countcompress3 == 6)
-            {
-              player.sendMessage("You have missed " + this.countcompress3 + " times. Current Health: " + getPlayerHP(player) + ".");
-              this.countcompress3 = 0;
-            }
-            else {
-              this.countcompress3 += 1;
-            }
-
-          }
-
-        }
-        else
-        {
-          if (m.getHealth() < 1)
-          {
-            continue;
-          }
-
-          int thisdmg = getPlayerDamage(player);
-
-          this.totaldmg += thisdmg;
-
-          if (getCombatLog(player) == 1)
-          {
-            player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
-          }
-          else if (getCombatLog(player) == 2)
-          {
-            if (this.countcompress2 == 4)
-            {
-              player.sendMessage("Total damage done " + this.totaldmg + ". Current Health: " + getPlayerHP(player) + ".");
-              this.countcompress2 = 0;
-              this.totaldmg = 0;
-            } else {
-              this.countcompress2 += 1;
-            }
-
-          }
-
-          if (m.getHealth() <= thisdmg)
-          {
-            player.sendMessage("You have slain a " + m.getName() + "!");
-            m.setHealth(0);
-            GiveExperience(player, 1);
-          } else {
-            m.setHealth(m.getHealth() - thisdmg);
-          }
-        }
-      }
-    }
+    
   }
 
 
