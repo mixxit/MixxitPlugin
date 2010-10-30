@@ -16,7 +16,6 @@ public class MixxitListener extends PluginListener
 {
   public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
   public PropertiesFile guilds = new PropertiesFile("MixxitPlugin.guilds");
-  PropertiesFile configPlayers;
   static final Logger log = Logger.getLogger("Minecraft");
 
   boolean pvp = false;
@@ -31,7 +30,6 @@ public class MixxitListener extends PluginListener
   public int countcompress4 = 0;
   public int countcompress5 = 0;
 
-  
   int Combattimer = 700;
 
   int woodensword = 6;
@@ -60,10 +58,12 @@ public class MixxitListener extends PluginListener
   int friedbacon = 20;
   int apple = 10;
   int bread = 15;
+  
   public Timer timer;
   public Timer saveTimer;
   public ArrayList<MixxitPlayer> playerList;
   public ArrayList<MixxitGuild> guildList;
+  
   public MixxitListener()
   {
     this.timer = new Timer();
@@ -181,7 +181,7 @@ public class MixxitListener extends PluginListener
 
           String[] params = tokens[1].split(":");
 
-          int curhp = 0;
+          int curhp = 10; //Start with no less then 10 HP
           int curexp = 0;
           int curmelee = 0;
           int curlevel = 0;
@@ -195,7 +195,7 @@ public class MixxitListener extends PluginListener
           int curwis = 0;
           int curcha = 0;
           int curlck = 0;
-
+          int curusp = 65; 	// Used for tracking unspent points -> Start character with 65 unspent points
           
           try          
           {
@@ -323,6 +323,15 @@ public class MixxitListener extends PluginListener
 
           }
           
+          try          
+          {
+        	  curusp = Integer.parseInt(params[13]);
+          }
+          catch (ArrayIndexOutOfBoundsException e)
+          {
+
+          }
+          
 
           MixxitPlayer curplayer = new MixxitPlayer(tokens[0], curhp);
           curplayer.exp = curexp;
@@ -338,6 +347,7 @@ public class MixxitListener extends PluginListener
           curplayer.stat_wis = curwis;
           curplayer.stat_cha = curcha;
           curplayer.stat_lck = curlck;
+          curplayer.stat_usp = curusp;
 
           this.playerList.add(curplayer);
         }
@@ -373,10 +383,10 @@ public class MixxitListener extends PluginListener
 
   public void packPlayers()
   {
-	System.out.println("Packing players...");
-    configPlayers = new PropertiesFile("MixxitPlugin.txt");
+	  System.out.println("Packing players...");
+    PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
     for (int i = 0; i < this.playerList.size(); i++) {
-      String playerData = ((MixxitPlayer)this.playerList.get(i)).hp + ":" + ((MixxitPlayer)this.playerList.get(i)).exp + ":" + ((MixxitPlayer)this.playerList.get(i)).melee + ":" + ((MixxitPlayer)this.playerList.get(i)).level + ":" + ((MixxitPlayer)this.playerList.get(i)).faction+ ":" + ((MixxitPlayer)this.playerList.get(i)).guild+ ":" + ((MixxitPlayer)this.playerList.get(i)).stat_str + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_sta + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_agi + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_dex + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_int + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_wis + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_cha + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_lck;
+      String playerData = ((MixxitPlayer)this.playerList.get(i)).hp + ":" + ((MixxitPlayer)this.playerList.get(i)).exp + ":" + ((MixxitPlayer)this.playerList.get(i)).melee + ":" + ((MixxitPlayer)this.playerList.get(i)).level + ":" + ((MixxitPlayer)this.playerList.get(i)).faction+ ":" + ((MixxitPlayer)this.playerList.get(i)).guild+ ":" + ((MixxitPlayer)this.playerList.get(i)).stat_str + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_sta + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_agi + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_dex + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_int + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_wis + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_cha + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_lck + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_usp;
       configPlayers.setString(((MixxitPlayer)this.playerList.get(i)).name, playerData);
     }
   }
@@ -390,14 +400,7 @@ public class MixxitListener extends PluginListener
 
   private double getDistance(Player a, Mob b)
   {
-	  
-	  double xPart = Math.pow(a.getX() - b.getX(), 2.0D);
-	  double yPart = Math.pow(a.getY() - b.getY(), 2.0D);
-	  double zPart = Math.pow(a.getZ() - b.getZ(), 2.0D);
-	  return Math.sqrt(xPart + yPart + zPart);
-	   
-	  // mixxit - doesnt work atm for some reason
-	  //return getRealDistance(a.getLocation(), new Location(b.getX(), b.getX(), b.getZ()));
+	  return getRealDistance(a.getLocation(), new Location(b.getX(), b.getX(), b.getZ()));
   }
 
   private double getPlayerDistance(Player a, Player b)
@@ -489,13 +492,29 @@ public class MixxitListener extends PluginListener
 	    return -1;
   }
 
+  // TODO: Tom316 - Need to change this to the new system.
   public void setPlayerLevel(Player player, int level)
   {
 	  for (int i = 0; i < this.playerList.size(); i++) {
 	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
 	      {
-	        ((MixxitPlayer)this.playerList.get(i)).level = level;
-	        player.sendMessage("Congratulations, you reached Level " + level + "!");
+	    	  // Tom316: Caculate how many points they should have.
+	    	 int curlevel = ((MixxitPlayer)this.playerList.get(i)).level;
+	    	 int newunspent = (level - curlevel) * 3; // 3 points per level
+	    	 
+	    	 // TODO: Remove after debugging
+	    	 player.sendMessage("DEBUG:: newunspent = " + newunspent + ".");
+	    	 
+	    	 // Tom316: Add new points to the already unspent points a player has.
+	    	 ((MixxitPlayer)this.playerList.get(i)).level = level;
+	    	 int unspent = ((MixxitPlayer)this.playerList.get(i)).stat_usp + newunspent;
+	    	  
+	    	 this.playerList.get(i).stat_usp = unspent + 3;
+	    	 player.sendMessage("Congratulations, you reached Level " + level + "!");
+	    	 player.sendMessage("You have " + unspent + " points to spend.");
+	        
+	        
+	        /*
 	        this.playerList.get(i).stat_str++;
 	        this.playerList.get(i).stat_sta++;
 	        this.playerList.get(i).stat_agi++;
@@ -503,7 +522,8 @@ public class MixxitListener extends PluginListener
 	        this.playerList.get(i).stat_int++;
 	        this.playerList.get(i).stat_wis++;
 	        this.playerList.get(i).stat_lck++;
-
+			*/
+	        
 	      }
 	    }
   }
@@ -559,6 +579,18 @@ public class MixxitListener extends PluginListener
 	    	  	}
 	      }
 	    }
+  }
+  
+  //TODO: Finish function
+  // Tom316: - Used for spending stat points
+  // Playername - how many points to spend - what to spend on
+  public void spendPoints(Player player, int value1, int value2)
+  {
+    for (int i = 0; i < this.playerList.size(); i++) {
+      if (!((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
+        continue;
+      this.playerList.get(i).combatlog = value1;
+    }
   }
   
   public void setCombatLog(Player player, int value)
@@ -1113,8 +1145,7 @@ public class MixxitListener extends PluginListener
       
       for (int ilevel = 1; ilevel < 41; ilevel++)
       {
-    	  // c99koder - fix
-    	  if (this.playerList.get(i).exp == (ilevel * 10) * ilevel)
+    	  if (this.playerList.get(i).exp == (i * 10) * i)
     	  {
     		  setPlayerLevel(player, ilevel);
     	  }
@@ -1371,7 +1402,6 @@ public class MixxitListener extends PluginListener
 	  // this prevents people from spamming attack too fast (defaults to combattimer (700))
 	if ((System.currentTimeMillis()/1000 - this.Combattimer/1000) <= getPlayerLastMove(player))
 	{
-		//player.sendMessage("You must wait before making another attack." + (System.currentTimeMillis()/1000 - this.Combattimer/1000) + "<=" + getPlayerLastMove(player));
 		return;
 	}
 	
@@ -1381,8 +1411,6 @@ public class MixxitListener extends PluginListener
 	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
 	      {
 	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
-	        //player.sendMessage("lastmove set:" + getPlayerLastMove(player));
-			
 	        //lastmove = ((MixxitPlayer)this.playerList.get(i)).lastmove;
 	      }
 	}
@@ -1431,85 +1459,6 @@ public class MixxitListener extends PluginListener
       inv.removeItem(inv.getItemFromId(iteminhand).getSlot()); // Messy but works somewhat.
       inv.updateInventory();
     }
-    //player.sendMessage("Debug - checking mob list");
-    for (Mob m : etc.getServer().getMobList())
-    {
-    	
-      if (m != null) {
-    	  
-    	  double dist = getDistance(player, m);
-    	  
-        if (dist >= 2.0D)
-          continue;
-        
-        
-        if (PlayerHasHit(player) == 0)
-        {
-          if (m.getHealth() < 1)
-          {
-            continue;
-          }
-         // player.sendMessage("Debug - missed");
-          if (getCombatLog(player) == 1)
-          {
-            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
-          }
-          else
-          {
-            if (getCombatLog(player) != 2)
-              continue;
-            if (this.countcompress3 == 6)
-            {
-              player.sendMessage("You have missed " + this.countcompress3 + " times. Current Health: " + getPlayerHP(player) + ".");
-              this.countcompress3 = 0;
-            }
-            else {
-              this.countcompress3 += 1;
-            }
-
-          }
-
-        }
-        else
-        {
-          if (m.getHealth() < 1)
-          {
-            continue;
-          }
-          //player.sendMessage("Debug - hit");
-          int thisdmg = getPlayerDamage(player);
-
-          this.totaldmg += thisdmg;
-
-          if (getCombatLog(player) == 1)
-          {
-            player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
-          }
-          else if (getCombatLog(player) == 2)
-          {
-            if (this.countcompress2 == 4)
-            {
-              player.sendMessage("Total damage done " + this.totaldmg + ". Current Health: " + getPlayerHP(player) + ".");
-              this.countcompress2 = 0;
-              this.totaldmg = 0;
-            } else {
-              this.countcompress2 += 1;
-            }
-
-          }
-
-          if (m.getHealth() <= thisdmg)
-          {
-            player.sendMessage("You have slain a " + m.getName() + "!");
-            m.setHealth(0);
-            GiveExperience(player, 1);
-          } else {
-            m.setHealth(m.getHealth() - thisdmg);
-          }
-        }
-      }
-    }
-    
 
     for (Player p : etc.getServer().getPlayerList())
     {
@@ -1605,7 +1554,79 @@ public class MixxitListener extends PluginListener
 
     }
 
-    
+    for (Mob m : etc.getServer().getMobList())
+    {
+      if (m != null) {
+        double dist = getDistance(player, m);
+
+        if (dist >= 2.0D)
+          continue;
+        if (PlayerHasHit(player) == 0)
+        {
+          if (m.getHealth() < 1)
+          {
+            continue;
+          }
+
+          if (getCombatLog(player) == 1)
+          {
+            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+          }
+          else
+          {
+            if (getCombatLog(player) != 2)
+              continue;
+            if (this.countcompress3 == 6)
+            {
+              player.sendMessage("You have missed " + this.countcompress3 + " times. Current Health: " + getPlayerHP(player) + ".");
+              this.countcompress3 = 0;
+            }
+            else {
+              this.countcompress3 += 1;
+            }
+
+          }
+
+        }
+        else
+        {
+          if (m.getHealth() < 1)
+          {
+            continue;
+          }
+
+          int thisdmg = getPlayerDamage(player);
+
+          this.totaldmg += thisdmg;
+
+          if (getCombatLog(player) == 1)
+          {
+            player.sendMessage("You strike " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage. Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+          }
+          else if (getCombatLog(player) == 2)
+          {
+            if (this.countcompress2 == 4)
+            {
+              player.sendMessage("Total damage done " + this.totaldmg + ". Current Health: " + getPlayerHP(player) + ".");
+              this.countcompress2 = 0;
+              this.totaldmg = 0;
+            } else {
+              this.countcompress2 += 1;
+            }
+
+          }
+
+          if (m.getHealth() <= thisdmg)
+          {
+            player.sendMessage("You have slain a " + m.getName() + "!");
+            m.setHealth(0);
+            GiveExperience(player, 1);
+          } else {
+            m.setHealth(m.getHealth() - thisdmg);
+          }
+        }
+      }
+    }
   }
 
 

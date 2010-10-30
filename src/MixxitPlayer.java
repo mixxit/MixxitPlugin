@@ -16,6 +16,7 @@ public class MixxitPlayer {
     public int stat_wis = 0;
     public int stat_cha = 0;
     public int stat_lck = 0;
+    public int stat_usp = 0; // Unspent Points
     public long lastmove = 0;
     public MixxitPlayer(String name, int hp)
     {

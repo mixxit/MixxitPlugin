@@ -82,7 +82,7 @@ class RemindTask extends TimerTask
         if (m == null) {
           continue;
         }
-        if (m.getName().equals("Creeper"))
+        if (m.getName() == "Boomer")
         {
           if (this.parent.boomers == false)
           {
@@ -94,21 +94,28 @@ class RemindTask extends TimerTask
           }
         }
         
-        if (m.getName().equals("Spider"))
+        if (m.getName() == "Spider")
         {
           for (Player p : etc.getServer().getPlayerList()) {
             DoMobCombat(m, p, 8);
           }
         }
 
-        if (m.getName().equals("Zombie"))
+        if (m.getName() == "Zombie")
         {
           for (Player p : etc.getServer().getPlayerList()) {
             DoMobCombat(m, p, 4);
           }
         }
 
-        if (m.getName().equals("Skeleton"))
+        if (m.getName() == "Creeper")
+        {
+          for (Player p : etc.getServer().getPlayerList()) {
+            DoMobCombat(m, p, 2);
+          }
+        }
+
+        if (m.getName() != "Skeleton")
           continue;
         for (Player p : etc.getServer().getPlayerList())
           DoMobCombat(m, p, 5);
