@@ -1103,14 +1103,8 @@ public class MixxitListener extends PluginListener
       }
       ((MixxitPlayer)this.playerList.get(i)).exp += amount;
       player.sendMessage("§eYou gain experience (" + this.playerList.get(i).exp + ")!");
-      Random generator = new Random();
-      int index = generator.nextInt(100);
-
-      if (index != 1)
-        continue;
-      ((MixxitPlayer)this.playerList.get(i)).melee += 1;
-      player.sendMessage("§9You get better at melee! (" + this.playerList.get(i).melee + ")!");
       
+
       for (int ilevel = 1; ilevel < 41; ilevel++)
       {
     	  // c99koder - fix
@@ -1119,6 +1113,16 @@ public class MixxitListener extends PluginListener
     		  setPlayerLevel(player, ilevel);
     	  }
       }
+      
+      Random generator = new Random();
+      int index = generator.nextInt(100);
+
+      if (index != 1)
+        continue;
+      ((MixxitPlayer)this.playerList.get(i)).melee += 1;
+      player.sendMessage("§9You get better at melee! (" + this.playerList.get(i).melee + ")!");
+      
+      
     }
   }
 
