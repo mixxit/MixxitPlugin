@@ -16,7 +16,7 @@ public class MixxitListener extends PluginListener
 {
   public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
   public PropertiesFile guilds = new PropertiesFile("MixxitPlugin.guilds");
-  PropertiesFile configPlayers;
+  public PropertiesFile configPlayers;
   static final Logger log = Logger.getLogger("Minecraft");
 
   boolean pvp = false;
@@ -363,11 +363,12 @@ public class MixxitListener extends PluginListener
   public void packGuilds()
   {
 	  System.out.println("Packing guilds...");
-	  PropertiesFile configGuilds = new PropertiesFile("MixxitPlugin.guilds");
+	  
+	  this.guilds = new PropertiesFile("MixxitPlugin.guilds");
 	    for (int i = 0; i < this.guildList.size(); i++) {
 	      String guildData = ((MixxitGuild)this.guildList.get(i)).guildid + ":" + ((MixxitGuild)this.guildList.get(i)).name + ":" + ((MixxitGuild)this.guildList.get(i)).owner + ":" + ((MixxitGuild)this.guildList.get(i)).home;
 	      System.out.println("Packing:" + guildData);
-	      configGuilds.setString(Integer.toString(((MixxitGuild)this.guildList.get(i)).guildid), guildData);
+	      guilds.setString(Integer.toString(((MixxitGuild)this.guildList.get(i)).guildid), guildData);
 	    }
   }
 
