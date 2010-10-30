@@ -1,4 +1,6 @@
-Version 1.16f
+Version 1.16g
+* Chicken mobname fixes etc
+* Save file changes for guilds
 * Made some fixes to creepers
 * configure setfaction to assign groups
 
