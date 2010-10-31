@@ -20,11 +20,11 @@ public class MixxitListener extends PluginListener
   static final Logger log = Logger.getLogger("Minecraft");
 
   boolean pvp = false;
-  boolean pvpteams = true;
+  boolean pvpteams = false;
   boolean dropinventory = true;
   boolean boomers = false;
   
-  public int totaldmg = 0;
+  public int totaldmg = 1;
   public int totalplydmg = 0;
   public int countcompress2 = 0;
   public int countcompress3 = 0;
@@ -1454,7 +1454,7 @@ public class MixxitListener extends PluginListener
           {
             continue;
           }
-         // player.sendMessage("Debug - missed");
+          //player.sendMessage("Debug - missed");
           if (getCombatLog(player) == 1)
           {
             player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
