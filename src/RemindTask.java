@@ -17,6 +17,8 @@ class RemindTask extends TimerTask
 
   public void DoMobCombat(Mob m, Player p, int basedamage)
   {
+	
+	  
     double dist = getDistance(p, m);
 
     if (dist <= 2.0D)
@@ -82,7 +84,7 @@ class RemindTask extends TimerTask
         if (m == null) {
           continue;
         }
-        if (m.getName() == "Boomer")
+        if (m.getName().equals("Creeper")  == true)
         {
           if (this.parent.boomers == false)
           {
@@ -94,31 +96,26 @@ class RemindTask extends TimerTask
           }
         }
         
-        if (m.getName() == "Spider")
+        if (m.getName().equals("Spider")  == true)
         {
           for (Player p : etc.getServer().getPlayerList()) {
             DoMobCombat(m, p, 8);
           }
         }
 
-        if (m.getName() == "Zombie")
+        if (m.getName().equals("Zombie")  == true)
         {
           for (Player p : etc.getServer().getPlayerList()) {
             DoMobCombat(m, p, 4);
           }
         }
-
-        if (m.getName() == "Creeper")
+        if (m.getName().equals("Skeleton") == true)
         {
-          for (Player p : etc.getServer().getPlayerList()) {
-            DoMobCombat(m, p, 2);
-          }
+	        for (Player p : etc.getServer().getPlayerList())
+	        {
+	          DoMobCombat(m, p, 5);
+	        }
         }
-
-        if (m.getName() != "Skeleton")
-          continue;
-        for (Player p : etc.getServer().getPlayerList())
-          DoMobCombat(m, p, 5);
       }
     }
     catch (ConcurrentModificationException localConcurrentModificationException)

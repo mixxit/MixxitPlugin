@@ -16,14 +16,15 @@ public class MixxitListener extends PluginListener
 {
   public PropertiesFile properties = new PropertiesFile("MixxitPlugin.properties");
   public PropertiesFile guilds = new PropertiesFile("MixxitPlugin.guilds");
+  public PropertiesFile configPlayers;
   static final Logger log = Logger.getLogger("Minecraft");
 
   boolean pvp = false;
-  boolean pvpteams = true;
+  boolean pvpteams = false;
   boolean dropinventory = true;
   boolean boomers = false;
   
-  public int totaldmg = 0;
+  public int totaldmg = 1;
   public int totalplydmg = 0;
   public int countcompress2 = 0;
   public int countcompress3 = 0;
@@ -362,18 +363,19 @@ public class MixxitListener extends PluginListener
   public void packGuilds()
   {
 	  System.out.println("Packing guilds...");
-	  PropertiesFile configGuilds = new PropertiesFile("MixxitPlugin.guilds");
+	  
+	  this.guilds = new PropertiesFile("MixxitPlugin.guilds");
 	    for (int i = 0; i < this.guildList.size(); i++) {
 	      String guildData = ((MixxitGuild)this.guildList.get(i)).guildid + ":" + ((MixxitGuild)this.guildList.get(i)).name + ":" + ((MixxitGuild)this.guildList.get(i)).owner + ":" + ((MixxitGuild)this.guildList.get(i)).home;
 	      System.out.println("Packing:" + guildData);
-	      configGuilds.setString(Integer.toString(((MixxitGuild)this.guildList.get(i)).guildid), guildData);
+	      guilds.setString(Integer.toString(((MixxitGuild)this.guildList.get(i)).guildid), guildData);
 	    }
   }
 
   public void packPlayers()
   {
-	  System.out.println("Packing players...");
-    PropertiesFile configPlayers = new PropertiesFile("MixxitPlugin.txt");
+	System.out.println("Packing players...");
+    configPlayers = new PropertiesFile("MixxitPlugin.txt");
     for (int i = 0; i < this.playerList.size(); i++) {
       String playerData = ((MixxitPlayer)this.playerList.get(i)).hp + ":" + ((MixxitPlayer)this.playerList.get(i)).exp + ":" + ((MixxitPlayer)this.playerList.get(i)).melee + ":" + ((MixxitPlayer)this.playerList.get(i)).level + ":" + ((MixxitPlayer)this.playerList.get(i)).faction+ ":" + ((MixxitPlayer)this.playerList.get(i)).guild+ ":" + ((MixxitPlayer)this.playerList.get(i)).stat_str + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_sta + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_agi + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_dex + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_int + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_wis + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_cha + ":" + ((MixxitPlayer)this.playerList.get(i)).stat_lck;
       configPlayers.setString(((MixxitPlayer)this.playerList.get(i)).name, playerData);
@@ -1102,9 +1104,11 @@ public class MixxitListener extends PluginListener
       }
       ((MixxitPlayer)this.playerList.get(i)).exp += amount;
       player.sendMessage("�eYou gain experience (" + this.playerList.get(i).exp + ")!");
+      
 
       for (int ilevel = 1; ilevel < 41; ilevel++)
       {
+    	  // c99koder - fix
     	  if (this.playerList.get(i).exp == (ilevel * 10) * ilevel)
     	  {
     		  setPlayerLevel(player, ilevel);
@@ -1448,7 +1452,7 @@ public class MixxitListener extends PluginListener
           {
             continue;
           }
-         // player.sendMessage("Debug - missed");
+          //player.sendMessage("Debug - missed");
           if (getCombatLog(player) == 1)
           {
             player.sendMessage("�7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
