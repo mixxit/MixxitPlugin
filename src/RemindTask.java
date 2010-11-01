@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,7 +37,7 @@ class RemindTask extends TimerTask
         {
           if (this.parent.getCombatLog(p) == 1)
           {
-            p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+            p.sendMessage("ï¿½cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
           }
           else if (this.parent.getCombatLog(p) == 2)
           {
@@ -59,7 +61,7 @@ class RemindTask extends TimerTask
 
         if (this.parent.getCombatLog(p) == 1)
         {
-          p.sendMessage("§cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+          p.sendMessage("ï¿½cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
         }
         else if (this.parent.getCombatLog(p) == 2)
         {
@@ -80,7 +82,10 @@ class RemindTask extends TimerTask
   {
     try
     {
-      for (Mob m : etc.getServer().getMobList()) {
+      List<Mob> mobs = new ArrayList<Mob>(etc.getServer().getMobList());
+      List<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
+      
+      for (Mob m : mobs) {
         if (m == null) {
           continue;
         }
@@ -91,27 +96,27 @@ class RemindTask extends TimerTask
         	  m.setHealth(0);
           }
         	
-          for (Player p : etc.getServer().getPlayerList()) {
+          for (Player p : players) {
             DoMobCombat(m, p, 3);
           }
         }
         
         if (m.getName().equals("Spider")  == true)
         {
-          for (Player p : etc.getServer().getPlayerList()) {
+          for (Player p : players) {
             DoMobCombat(m, p, 8);
           }
         }
 
         if (m.getName().equals("Zombie")  == true)
         {
-          for (Player p : etc.getServer().getPlayerList()) {
+          for (Player p : players) {
             DoMobCombat(m, p, 4);
           }
         }
         if (m.getName().equals("Skeleton") == true)
         {
-	        for (Player p : etc.getServer().getPlayerList())
+	        for (Player p : players)
 	        {
 	          DoMobCombat(m, p, 5);
 	        }
