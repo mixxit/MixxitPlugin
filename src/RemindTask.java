@@ -85,6 +85,24 @@ class RemindTask extends TimerTask
       List<Mob> mobs = new ArrayList<Mob>(etc.getServer().getMobList());
       List<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
       
+      for (Player p : players) {
+    	  Location l = p.getLocation();
+    	  int id = etc.getServer().getBlockIdAt((int)l.x, (int)(l.y), (int)(l.z)-1);
+    	  
+    	  if(id == 10 || id == 11) { //lava
+    		  if(this.parent.getPlayerHP(p) > 2) {
+    	        this.parent.setPlayerHP(p, Integer.valueOf(this.parent.getPlayerHP(p) - 2));
+
+    	        if (this.parent.getCombatLog(p) == 1)
+    	        {
+    	          p.sendMessage("�cYou are standing in lava! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+    	        }
+    		  } else {
+    			  this.parent.DoPlayerDeath(p);
+    		  }
+    	  }
+      }
+      
       for (Mob m : mobs) {
         if (m == null) {
           continue;
