@@ -1108,7 +1108,7 @@ public class MixxitListener extends PluginListener
         continue;
       }
       ((MixxitPlayer)this.playerList.get(i)).exp += amount;
-      player.sendMessage("�eYou gain experience (" + this.playerList.get(i).exp + ")!");
+      player.sendMessage("§eYou gain experience (" + this.playerList.get(i).exp + ")!");
       
 
       for (int ilevel = 1; ilevel < 41; ilevel++)
@@ -1126,7 +1126,7 @@ public class MixxitListener extends PluginListener
       if (index != 1)
         continue;
       ((MixxitPlayer)this.playerList.get(i)).melee += 1;
-      player.sendMessage("�9You get better at melee! (" + this.playerList.get(i).melee + ")!");
+      player.sendMessage("§9You get better at melee! (" + this.playerList.get(i).melee + ")!");
     }
   }
 
@@ -1463,7 +1463,7 @@ public class MixxitListener extends PluginListener
           //player.sendMessage("Debug - missed");
           if (getCombatLog(player) == 1)
           {
-            player.sendMessage("�7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
           }
           else
           {
@@ -1559,7 +1559,7 @@ public class MixxitListener extends PluginListener
         }
         if (getCombatLog(player) != 1)
           continue;
-        player.sendMessage("�7You try to strike a " + p.getName() + " HP: (" + getPlayerHP(p) + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+        player.sendMessage("§7You try to strike a " + p.getName() + " HP: (" + getPlayerHP(p) + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       }
       else
       {
@@ -1586,7 +1586,7 @@ public class MixxitListener extends PluginListener
         if (getPlayerHP(p) < thisdmg)
         {
           player.sendMessage("You have slain " + p.getName() + "!");
-          p.sendMessage("�cYou have been slain by " + player.getName() + "!");
+          p.sendMessage("§cYou have been slain by " + player.getName() + "!");
 
           DoPlayerDeath(p);
         } else {
@@ -1594,7 +1594,7 @@ public class MixxitListener extends PluginListener
           this.totalplydmg += thisdmg;
           if (getCombatLog(p) == 1)
           {
-            p.sendMessage("�cYou have been hit by " + player.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(p) + "/" + getMaxBaseHealth(player) + " Their HP: " + getPlayerHP(player));
+            p.sendMessage("§cYou have been hit by " + player.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(p) + "/" + getMaxBaseHealth(player) + " Their HP: " + getPlayerHP(player));
           }
           else {
             if (getCombatLog(p) != 2)

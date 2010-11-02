@@ -37,7 +37,7 @@ class RemindTask extends TimerTask
         {
           if (this.parent.getCombatLog(p) == 1)
           {
-            p.sendMessage("�cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+            p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
           }
           else if (this.parent.getCombatLog(p) == 2)
           {
@@ -61,7 +61,7 @@ class RemindTask extends TimerTask
 
         if (this.parent.getCombatLog(p) == 1)
         {
-          p.sendMessage("�cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+          p.sendMessage("§cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
         }
         else if (this.parent.getCombatLog(p) == 2)
         {
@@ -95,7 +95,7 @@ class RemindTask extends TimerTask
 
     	        if (this.parent.getCombatLog(p) == 1)
     	        {
-    	          p.sendMessage("�cYou are standing in lava! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+    	          p.sendMessage("§cYou are standing in lava! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
     	        }
     		  } else {
     			  this.parent.DoPlayerDeath(p);
