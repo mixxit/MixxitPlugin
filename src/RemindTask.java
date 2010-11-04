@@ -82,8 +82,7 @@ class RemindTask extends TimerTask
   {
     try
     {
-      List<Mob> mobs = new ArrayList<Mob>(etc.getServer().getMobList());
-      List<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
+      List<Player> players = etc.getServer().getPlayerList();
       
       for (Player p : players) {
     	  Location l = p.getLocation();
@@ -124,7 +123,7 @@ class RemindTask extends TimerTask
     	  }
 }
       
-      for (Mob m : mobs) {
+      for (Mob m : etc.getServer().getMobList()) {
         if (m == null) {
           continue;
         }

@@ -643,9 +643,8 @@ public class MixxitListener extends PluginListener
 	  newguild.name = name;
 	  newguild.owner = owner;
 	  this.guildList.add(newguild);
-	  ArrayList<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
 	  
-	  for (Player p : players)
+	  for (Player p : etc.getServer().getPlayerList())
 	  {
 		  if (p.getName().equals(owner) == true)
 		  {
@@ -709,9 +708,8 @@ public class MixxitListener extends PluginListener
 
   public Player getPlayerByName(String name)
   {
-	  ArrayList<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
 	  Player player = new Player();
-	  for (Player p : players)
+	  for (Player p : etc.getServer().getPlayerList())
 	  {
 		  if (p.getName().equals(name) == true)
 		  {
@@ -739,8 +737,7 @@ public class MixxitListener extends PluginListener
   
   public void getAllPlayers(Player player)
   {
-	  ArrayList<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
-	  for (Player p : players)
+	  for (Player p : etc.getServer().getPlayerList())
 	  {
 		  
 		  player.sendMessage(p.getName() + " - " + getPlayerGuildName(p) + " " + getFactionName(getPlayerFaction(p)));
@@ -1052,8 +1049,7 @@ public class MixxitListener extends PluginListener
         	{
         		player.sendMessage("Syntax /guildlist <guildname>");
         	} else {
-        		ArrayList<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
-        		for (Player p : players)
+        		for (Player p : etc.getServer().getPlayerList())
         		  {
         			if (getGuildName(getGuild(p)).equals(split[1]))
         			{
@@ -1351,8 +1347,7 @@ public class MixxitListener extends PluginListener
   
   public int getPlayerGuildID(String name)
   {
-		ArrayList<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
-	  for (Player p : players)
+	  for (Player p : etc.getServer().getPlayerList())
 	  {
 		  if (p.getName().equals(name) == true)
 		  {
@@ -1461,9 +1456,8 @@ public class MixxitListener extends PluginListener
       inv.updateInventory();
     }
     //player.sendMessage("Debug - checking mob list");
-    List<Mob> mobs = new ArrayList<Mob>(etc.getServer().getMobList());
     
-    for (Mob m : mobs)
+    for (Mob m : etc.getServer().getMobList())
     {
     	
       if (m != null) {
@@ -1541,8 +1535,7 @@ public class MixxitListener extends PluginListener
       }
     }
     
-    List<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
-    for (Player p : players)
+    for (Player p : etc.getServer().getPlayerList())
     {
       if ((p == null) || 
         (p.getName() == player.getName())) {

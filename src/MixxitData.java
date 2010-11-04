@@ -39,8 +39,7 @@ public class MixxitData {
 	private static void populate() {
 		users = new ArrayList<Mortal>();
 		userdata.load();
-		ArrayList<Player> players = new ArrayList<Player>(etc.getServer().getPlayerList());
-		for (Player p : players)
+		for (Player p : etc.getServer().getPlayerList())
 			addMortal(p);
 	}
 
