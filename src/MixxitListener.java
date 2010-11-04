@@ -442,6 +442,26 @@ public class MixxitListener extends PluginListener
     }
   }
 
+  public int getPlayerBreath(Player player)
+  {
+    for (int i = 0; i < this.playerList.size(); i++) {
+      if (this.playerList.get(i).name.equals(player.getName()))
+      {
+        return this.playerList.get(i).breath;
+      }
+    }
+    return 0;
+  }
+
+  public void setPlayerBreath(Player player, Integer newbreath)
+  {
+    for (int i = 0; i < this.playerList.size(); i++) {
+      if (!this.playerList.get(i).name.equals(player.getName()))
+        continue;
+      ((MixxitPlayer)this.playerList.get(i)).breath = newbreath;
+    }
+  }
+
   public int getPlayerMelee(Player player)
   {
     for (int i = 0; i < this.playerList.size(); i++) {

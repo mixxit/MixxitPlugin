@@ -101,7 +101,28 @@ class RemindTask extends TimerTask
     			  this.parent.DoPlayerDeath(p);
     		  }
     	  }
-      }
+
+    	  id = etc.getServer().getBlockIdAt((int)l.x, (int)(l.y)+1, (int)(l.z)-1);
+    	  
+    	  if(id == 8 || id == 9) { //water
+    		  if(this.parent.getPlayerBreath(p) > 0) {
+    			  this.parent.setPlayerBreath(p, Integer.valueOf(this.parent.getPlayerBreath(p)) - 1);
+    		  } else {
+	    		  if(this.parent.getPlayerHP(p) > 2) {
+	    	        this.parent.setPlayerHP(p, Integer.valueOf(this.parent.getPlayerHP(p) - 2));
+	
+	    	        if (this.parent.getCombatLog(p) == 1)
+	    	        {
+	    	          p.sendMessage(Colors.Rose + "You are drowning! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+	    	        }
+	    		  } else {
+	    			  this.parent.DoPlayerDeath(p);
+	    		  }
+    		  }
+    	  } else {
+			  this.parent.setPlayerBreath(p, 25);
+    	  }
+}
       
       for (Mob m : mobs) {
         if (m == null) {
