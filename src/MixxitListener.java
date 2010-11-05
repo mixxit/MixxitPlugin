@@ -23,6 +23,7 @@ public class MixxitListener extends PluginListener
   boolean pvpteams = false;
   boolean dropinventory = true;
   boolean boomers = false;
+  boolean falling = false;
   
   public int totaldmg = 1;
   public int totalplydmg = 0;
@@ -128,6 +129,7 @@ public class MixxitListener extends PluginListener
       this.pvp = this.properties.getBoolean("pvp", false);
       this.pvpteams = this.properties.getBoolean("pvpteams", true);
       this.dropinventory = this.properties.getBoolean("drop-inventory", true);
+      this.falling = this.properties.getBoolean("falling", true);
       this.Combattimer = this.properties.getInt("combat-timer", 700);
       this.boomers = this.properties.getBoolean("boomers", false);
       this.woodensword = this.properties.getInt("wooden-sword", 6);
@@ -1101,7 +1103,7 @@ public class MixxitListener extends PluginListener
       }
       player.sendMessage("Welcome back! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       player.sendMessage("PVP MODE: "+ this.pvp + " PVP Teams: " + this.pvpteams);
-      player.sendMessage("Boomers: "+ this.boomers);
+      player.sendMessage("Boomers: "+ this.boomers + " Falling: " + this.falling);
       
     }
 
@@ -1114,6 +1116,39 @@ public class MixxitListener extends PluginListener
     }
   }
 
+  public void onPlayerMove(Player player, Location from, Location to)
+  {
+	  if(this.falling) {
+		  for (int i = 0; i < this.playerList.size(); i++) {
+			  MixxitPlayer p = this.playerList.get(i);
+		      if (p.name.equals(player.getName())) {
+		    	  if(from.x == to.x && from.z == to.z) {
+			    	  if(System.currentTimeMillis() - 200 <= p.lastmove) {
+			    		  p.deltaY += (from.y - to.y);
+			    		  if(p.deltaY >= 5) {
+			        		  if(p.hp > 1) {
+			          	        p.hp -= 1;
+	
+			          	        if (p.combatlog == 1)
+			          	        {
+			          	          player.sendMessage(Colors.Rose + "You are falling! (CurrHP: " + p.hp + "/" + getMaxBaseHealth(player) + ")");
+			          	        }
+			          		  } else {
+			          			  DoPlayerDeath(player);
+			          		  }
+			    		  }
+			    	  } else {
+			    		  p.deltaY = 0;
+			    	  }
+		    	  } else {
+		    		  p.deltaY = 0;
+		    	  }
+		    	  p.lastmove = System.currentTimeMillis();
+		      }
+		  }
+	  }
+  }
+  
   public void GiveExperience(Player player, int amount)
   {
     player.sendMessage("Pending experience...");
@@ -1383,7 +1418,7 @@ public class MixxitListener extends PluginListener
 	  for (int i = 0; i < this.playerList.size(); i++) {
 	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
-	        return this.playerList.get(i).lastmove = System.currentTimeMillis()/1000;
+	        return this.playerList.get(i).lastmove = System.currentTimeMillis();
 	      }
 	  }
 	  return lastmove;
@@ -1392,7 +1427,7 @@ public class MixxitListener extends PluginListener
   public void onArmSwing(Player player)
   {
 	  // this prevents people from spamming attack too fast (defaults to combattimer (700))
-	if ((System.currentTimeMillis()/1000 - this.Combattimer/1000) <= getPlayerLastMove(player))
+	if ((System.currentTimeMillis() - this.Combattimer) <= getPlayerLastMove(player))
 	{
 		//player.sendMessage("You must wait before making another attack." + (System.currentTimeMillis()/1000 - this.Combattimer/1000) + "<=" + getPlayerLastMove(player));
 		return;
@@ -1403,7 +1438,7 @@ public class MixxitListener extends PluginListener
 	for (int i = 0; i < this.playerList.size(); i++) {
 	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
 	      {
-	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
+	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis();
 	        //player.sendMessage("lastmove set:" + getPlayerLastMove(player));
 			
 	        //lastmove = ((MixxitPlayer)this.playerList.get(i)).lastmove;

@@ -18,6 +18,7 @@ public class MixxitPlayer {
     public int stat_lck = 0;
     public long lastmove = 0;
     public int breath = 25;
+    public int deltaY = 0;
     public MixxitPlayer(String name, int hp)
     {
       this.name = name;
