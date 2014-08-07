@@ -23,6 +23,7 @@ public class MixxitListener extends PluginListener
   boolean pvpteams = false;
   boolean dropinventory = true;
   boolean boomers = false;
+  boolean falling = false;
   
   public int totaldmg = 1;
   public int totalplydmg = 0;
@@ -128,6 +129,7 @@ public class MixxitListener extends PluginListener
       this.pvp = this.properties.getBoolean("pvp", false);
       this.pvpteams = this.properties.getBoolean("pvpteams", true);
       this.dropinventory = this.properties.getBoolean("drop-inventory", true);
+      this.falling = this.properties.getBoolean("falling", true);
       this.Combattimer = this.properties.getInt("combat-timer", 700);
       this.boomers = this.properties.getBoolean("boomers", false);
       this.woodensword = this.properties.getInt("wooden-sword", 6);
@@ -438,6 +440,26 @@ public class MixxitListener extends PluginListener
     	  finalhp = newhp.intValue();
       }
       ((MixxitPlayer)this.playerList.get(i)).hp = finalhp;
+    }
+  }
+
+  public int getPlayerBreath(Player player)
+  {
+    for (int i = 0; i < this.playerList.size(); i++) {
+      if (this.playerList.get(i).name.equals(player.getName()))
+      {
+        return this.playerList.get(i).breath;
+      }
+    }
+    return 0;
+  }
+
+  public void setPlayerBreath(Player player, Integer newbreath)
+  {
+    for (int i = 0; i < this.playerList.size(); i++) {
+      if (!this.playerList.get(i).name.equals(player.getName()))
+        continue;
+      ((MixxitPlayer)this.playerList.get(i)).breath = newbreath;
     }
   }
 
@@ -1081,7 +1103,7 @@ public class MixxitListener extends PluginListener
       }
       player.sendMessage("Welcome back! HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       player.sendMessage("PVP MODE: "+ this.pvp + " PVP Teams: " + this.pvpteams);
-      player.sendMessage("Boomers: "+ this.boomers);
+      player.sendMessage("Boomers: "+ this.boomers + " Falling: " + this.falling);
       
     }
 
@@ -1094,6 +1116,39 @@ public class MixxitListener extends PluginListener
     }
   }
 
+  public void onPlayerMove(Player player, Location from, Location to)
+  {
+	  if(this.falling) {
+		  for (int i = 0; i < this.playerList.size(); i++) {
+			  MixxitPlayer p = this.playerList.get(i);
+		      if (p.name.equals(player.getName())) {
+		    	  if(from.x == to.x && from.z == to.z) {
+			    	  if(System.currentTimeMillis() - 200 <= p.lastmove) {
+			    		  p.deltaY += (from.y - to.y);
+			    		  if(p.deltaY >= 5) {
+			        		  if(p.hp > 1) {
+			          	        p.hp -= 1;
+	
+			          	        if (p.combatlog == 1)
+			          	        {
+			          	          player.sendMessage(Colors.Rose + "You are falling! (CurrHP: " + p.hp + "/" + getMaxBaseHealth(player) + ")");
+			          	        }
+			          		  } else {
+			          			  DoPlayerDeath(player);
+			          		  }
+			    		  }
+			    	  } else {
+			    		  p.deltaY = 0;
+			    	  }
+		    	  } else {
+		    		  p.deltaY = 0;
+		    	  }
+		    	  p.lastmove = System.currentTimeMillis();
+		      }
+		  }
+	  }
+  }
+  
   public void GiveExperience(Player player, int amount)
   {
     player.sendMessage("Pending experience...");
@@ -1103,7 +1158,7 @@ public class MixxitListener extends PluginListener
         continue;
       }
       ((MixxitPlayer)this.playerList.get(i)).exp += amount;
-      player.sendMessage("§eYou gain experience (" + this.playerList.get(i).exp + ")!");
+      player.sendMessage(Colors.Yellow + "You gain experience (" + this.playerList.get(i).exp + ")!");
       
 
       for (int ilevel = 1; ilevel < 41; ilevel++)
@@ -1121,9 +1176,7 @@ public class MixxitListener extends PluginListener
       if (index != 1)
         continue;
       ((MixxitPlayer)this.playerList.get(i)).melee += 1;
-      player.sendMessage("§9You get better at melee! (" + this.playerList.get(i).melee + ")!");
-      
-      
+      player.sendMessage(Colors.DarkPurple + "You get better at melee! (" + this.playerList.get(i).melee + ")!");
     }
   }
 
@@ -1365,7 +1418,7 @@ public class MixxitListener extends PluginListener
 	  for (int i = 0; i < this.playerList.size(); i++) {
 	      if (this.playerList.get(i).name.equals(player.getName()))
 	      {
-	        return this.playerList.get(i).lastmove = System.currentTimeMillis()/1000;
+	        return this.playerList.get(i).lastmove = System.currentTimeMillis();
 	      }
 	  }
 	  return lastmove;
@@ -1374,7 +1427,7 @@ public class MixxitListener extends PluginListener
   public void onArmSwing(Player player)
   {
 	  // this prevents people from spamming attack too fast (defaults to combattimer (700))
-	if ((System.currentTimeMillis()/1000 - this.Combattimer/1000) <= getPlayerLastMove(player))
+	if ((System.currentTimeMillis() - this.Combattimer) <= getPlayerLastMove(player))
 	{
 		//player.sendMessage("You must wait before making another attack." + (System.currentTimeMillis()/1000 - this.Combattimer/1000) + "<=" + getPlayerLastMove(player));
 		return;
@@ -1385,7 +1438,7 @@ public class MixxitListener extends PluginListener
 	for (int i = 0; i < this.playerList.size(); i++) {
 	      if (((MixxitPlayer)this.playerList.get(i)).name.equals(player.getName()))
 	      {
-	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis()/1000;
+	        ((MixxitPlayer)this.playerList.get(i)).lastmove = System.currentTimeMillis();
 	        //player.sendMessage("lastmove set:" + getPlayerLastMove(player));
 			
 	        //lastmove = ((MixxitPlayer)this.playerList.get(i)).lastmove;
@@ -1437,6 +1490,7 @@ public class MixxitListener extends PluginListener
       inv.updateInventory();
     }
     //player.sendMessage("Debug - checking mob list");
+    
     for (Mob m : etc.getServer().getMobList())
     {
     	
@@ -1444,7 +1498,7 @@ public class MixxitListener extends PluginListener
     	  
     	  double dist = getDistance(player, m);
     	  
-        if (dist >= 2.0D)
+        if (dist > 2.0D)
           continue;
         
         
@@ -1457,7 +1511,7 @@ public class MixxitListener extends PluginListener
           //player.sendMessage("Debug - missed");
           if (getCombatLog(player) == 1)
           {
-            player.sendMessage("§7You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+            player.sendMessage(Colors.LightGray + "You try to strike a " + m.getName() + " HP: (" + m.getHealth() + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
           }
           else
           {
@@ -1515,7 +1569,6 @@ public class MixxitListener extends PluginListener
       }
     }
     
-
     for (Player p : etc.getServer().getPlayerList())
     {
       if ((p == null) || 
@@ -1553,7 +1606,7 @@ public class MixxitListener extends PluginListener
         }
         if (getCombatLog(player) != 1)
           continue;
-        player.sendMessage("§7You try to strike a " + p.getName() + " HP: (" + getPlayerHP(p) + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
+        player.sendMessage(Colors.LightGray + "You try to strike a " + p.getName() + " HP: (" + getPlayerHP(p) + ") but miss! Your HP: " + getPlayerHP(player)+ "/" + getMaxBaseHealth(player) );
       }
       else
       {
@@ -1580,7 +1633,7 @@ public class MixxitListener extends PluginListener
         if (getPlayerHP(p) < thisdmg)
         {
           player.sendMessage("You have slain " + p.getName() + "!");
-          p.sendMessage("§cYou have been slain by " + player.getName() + "!");
+          p.sendMessage(Colors.Rose + "You have been slain by " + player.getName() + "!");
 
           DoPlayerDeath(p);
         } else {
@@ -1588,7 +1641,7 @@ public class MixxitListener extends PluginListener
           this.totalplydmg += thisdmg;
           if (getCombatLog(p) == 1)
           {
-            p.sendMessage("§cYou have been hit by " + player.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(p) + "/" + getMaxBaseHealth(player) + " Their HP: " + getPlayerHP(player));
+            p.sendMessage(Colors.Rose + "You have been hit by " + player.getName() + " for " + thisdmg + " damage. Your HP: " + getPlayerHP(p) + "/" + getMaxBaseHealth(player) + " Their HP: " + getPlayerHP(player));
           }
           else {
             if (getCombatLog(p) != 2)

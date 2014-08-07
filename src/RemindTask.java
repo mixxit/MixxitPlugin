@@ -1,4 +1,5 @@
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,7 +36,7 @@ class RemindTask extends TimerTask
         {
           if (this.parent.getCombatLog(p) == 1)
           {
-            p.sendMessage("§cYou were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+            p.sendMessage(Colors.Rose + "You were hit by " + m.getName() + " HP: (" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
           }
           else if (this.parent.getCombatLog(p) == 2)
           {
@@ -59,7 +60,7 @@ class RemindTask extends TimerTask
 
         if (this.parent.getCombatLog(p) == 1)
         {
-          p.sendMessage("§cYou were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+          p.sendMessage(Colors.Rose + "You were hit by " + m.getName() + " HP(" + m.getHealth() + ") for " + thisdmg + " damage! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
         }
         else if (this.parent.getCombatLog(p) == 2)
         {
@@ -80,6 +81,47 @@ class RemindTask extends TimerTask
   {
     try
     {
+      List<Player> players = etc.getServer().getPlayerList();
+      
+      for (Player p : players) {
+    	  Location l = p.getLocation();
+    	  int id = etc.getServer().getBlockIdAt((int)l.x, (int)(l.y), (int)(l.z)-1);
+    	  
+    	  if(id == 10 || id == 11) { //lava
+    		  if(this.parent.getPlayerHP(p) > 2) {
+    	        this.parent.setPlayerHP(p, Integer.valueOf(this.parent.getPlayerHP(p) - 2));
+
+    	        if (this.parent.getCombatLog(p) == 1)
+    	        {
+    	          p.sendMessage(Colors.Rose + "You are standing in lava! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+    	        }
+    		  } else {
+    			  this.parent.DoPlayerDeath(p);
+    		  }
+    	  }
+
+    	  id = etc.getServer().getBlockIdAt((int)l.x, (int)(l.y)+1, (int)(l.z)-1);
+    	  
+    	  if(id == 8 || id == 9) { //water
+    		  if(this.parent.getPlayerBreath(p) > 0) {
+    			  this.parent.setPlayerBreath(p, Integer.valueOf(this.parent.getPlayerBreath(p)) - 1);
+    		  } else {
+	    		  if(this.parent.getPlayerHP(p) > 2) {
+	    	        this.parent.setPlayerHP(p, Integer.valueOf(this.parent.getPlayerHP(p) - 2));
+	
+	    	        if (this.parent.getCombatLog(p) == 1)
+	    	        {
+	    	          p.sendMessage(Colors.Rose + "You are drowning! (CurrHP: " + this.parent.getPlayerHP(p) + "/" + this.parent.getMaxBaseHealth(p) + ")");
+	    	        }
+	    		  } else {
+	    			  this.parent.DoPlayerDeath(p);
+	    		  }
+    		  }
+    	  } else {
+			  this.parent.setPlayerBreath(p, 25);
+    	  }
+}
+      
       for (Mob m : etc.getServer().getMobList()) {
         if (m == null) {
           continue;
@@ -91,27 +133,27 @@ class RemindTask extends TimerTask
         	  m.setHealth(0);
           }
         	
-          for (Player p : etc.getServer().getPlayerList()) {
+          for (Player p : players) {
             DoMobCombat(m, p, 3);
           }
         }
         
         if (m.getName().equals("Spider")  == true)
         {
-          for (Player p : etc.getServer().getPlayerList()) {
+          for (Player p : players) {
             DoMobCombat(m, p, 8);
           }
         }
 
         if (m.getName().equals("Zombie")  == true)
         {
-          for (Player p : etc.getServer().getPlayerList()) {
+          for (Player p : players) {
             DoMobCombat(m, p, 4);
           }
         }
         if (m.getName().equals("Skeleton") == true)
         {
-	        for (Player p : etc.getServer().getPlayerList())
+	        for (Player p : players)
 	        {
 	          DoMobCombat(m, p, 5);
 	        }
